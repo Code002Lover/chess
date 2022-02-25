@@ -1,15 +1,21 @@
-body{
-    background-color: rgba(27, 31, 35);
-    color:aliceblue;
-    font-family: 'Noto Sans', Sans-Serif;
-    text-align:center;
+body {
+  background-color: rgba(27, 31, 35);
+  color: aliceblue;
+  font-family: "Noto Sans", Sans-Serif;
+  text-align: center;
 }
 
-#main{
-    background-image:url(../images/Boards/Black-Gray.png);
-    position:absolute;
-    min-width:400px;
-    min-height:400px;
-    image-rendering: pixelated;
-    background-size: cover;
+#main {
+  text-align: center;
+}
+
+#GameRelated1 {
+  position: absolute;
+  background-image: url(../images/Boards/Black-Gray.png);
+  background-size: cover;
+  image-rendering: pixelated;
+  width: 300px;
+  height: 300px;
+  left: 100px;
+  right: 100px;
 }
