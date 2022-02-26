@@ -11,6 +11,18 @@
   <body>
     <div id="GameRelated1"></div>
     <script>
+      var socket;
+      function createws(){
+        socket = new WebSocket('ws://ftp.infiniteonline.ga'); // TODO: add websocketserver
+        socket.addEventListener('open', function (event) {
+            socket.send('Hello Server!');
+            // TODO: verify to the server with the acc
+        });
+        socket.addEventListener('message', function (event) {
+            console.log('Message from server ', event.data);
+            // TODO: handle info
+        });
+      }
       var grid = {}
       var doc = document.getElementById("GameRelated1");
       for (let x = 0; x < 8; x++) { //js starts at 0, Fyshi
