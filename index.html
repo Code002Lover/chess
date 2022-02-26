@@ -11,15 +11,18 @@
   <body>
     <div id="GameRelated1"></div>
     <script>
-
-    var grid = {}
-
+      var grid = {}
       var doc = document.getElementById("GameRelated1");
-      for (let x = 0; x <= 8; x++) { //js starts at 0, Fyshi
+      for (let x = 0; x < 8; x++) { //js starts at 0, Fyshi
         grid[x] = grid[x] || {}
-        for (let y = 0; y <= 8; y++) {
+        for (let y = 0; y < 8; y++) {
           grid[x][y] = grid[x][y] || {}
-          //let isDark = (x+y)%2==0
+          let isDark = (x+y)%2==0
+          if(isDark){
+            grid[x][y]["dom"]=`<img src="images/Boards/gray.png">`
+          } else {
+            grid[x][y]["dom"]=`<img src="images/Boards/white.png">`
+          }
         }
       }
       console.log("created 2d grid")
