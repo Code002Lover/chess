@@ -5,17 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>(╯°□°）╯︵ ┻━┻</title>
-    <link rel="stylesheet" href="../css/standard.css" />
-    <script src="../js/init.js"></script>
+    <link rel="stylesheet" href="css/standard.css" />
+    <script src="js/init.js"></script>
   </head>
   <body>
     <div id="GameRelated1"></div>
     <script>
-      //for (let i = 1; i <= 32; i++) {
-        var doc = document.getElementById("GameRelated1");
-        
-       
-      //}
+
+    var grid = {}
+
+      var doc = document.getElementById("GameRelated1");
+      for (let x = 0; x <= 8; x++) { //js starts at 0, Fyshi
+        grid[x] = grid[x] || {}
+        for (let y = 0; y <= 8; y++) {
+          grid[x][y] = grid[x][y] || {}
+          //let isDark = (x+y)%2==0
+        }
+      }
+      console.log("created 2d grid")
     </script>
   </body>
 </html>
