@@ -71,7 +71,7 @@
         let isDark = (x+y)%2==1
         grid[x][y]["isdark"]=isDark
         if(isDark){
-          grid[x][y]["dom"]=`<img src="/images/Boards/gray.png" class="bg" width=${boardsize/8} height=${boardsize/8}>`
+          grid[x][y]["dom"]=`<img src="/images/Boards/gray.png"  class="bg" width=${boardsize/8} height=${boardsize/8}>`
         } else {
           grid[x][y]["dom"]=`<img src="/images/Boards/white.png" class="bg" width=${boardsize/8} height=${boardsize/8}>`
         }
@@ -112,9 +112,9 @@
 
         if(piece!="dummy") {
           if(y<6) {
-            toinsert += `<img src="/images/pieces/dark/${piece}.png"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
+            toinsert += `<img src="/images/pieces/dark/${piece}.png" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
           } else {
-            toinsert += `<img src="/images/pieces/white/${piece}.png" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
+            toinsert += `<img src="/images/pieces/white/${piece}.png" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
           }
         }
         toinsert += grid[x][y]['dom']
