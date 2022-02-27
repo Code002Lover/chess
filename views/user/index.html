@@ -23,6 +23,12 @@
 
     <script>
 
+    function highlight_background(x,y) {
+      let div = document.getElementById(x+"-"+y)
+      let bg = div.getElementsByClassName("bg")
+      bg[0].src="x"
+    }
+
     function clicked_piece(x,y) { console.log(x+" "+y); }
 
     let boardsize = 296
