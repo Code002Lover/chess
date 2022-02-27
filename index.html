@@ -86,26 +86,26 @@
           let toinsert = `<div class="board absolute" id='${x}-${y}' style="left:${c_w/2-boardsize+x*(boardsize/8)}px;top:${c_h/2-boardsize+y*(boardsize/8)}px">`
           let piece = "dummy"
 
-          if(y==1 || y==6)piece="pawn"
+          if(y==1 || y==6)piece="Pawn"
           if(y==0 || y==7) {
             switch (x) {
               case 0:
               case 7:
-                piece="rook"
+                piece="Rook"
                 break;
               case 1:
               case 6:
-                piece="knight"
+                piece="Knight"
                 break;
               case 2:
               case 5:
-                piece="bishop"
+                piece="Bishop"
                 break;
               case 4:
-                piece="queen"
+                piece="Queen"
                 break
               case 3:
-                piece="king"
+                piece="King"
                 break
             }
 
