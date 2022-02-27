@@ -19,8 +19,8 @@ body {
   left: 100px;
 }
 
-.board {
-  display: inline;
+.absolute {
+  /* display: inline; */
   position: absolute;
 }
 
