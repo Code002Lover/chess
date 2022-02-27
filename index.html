@@ -21,11 +21,20 @@
 
     <script>
 
+    let boardsize = 296
+    const c_w = window.innerWidth;
+    const c_h = window.innerHeight;
+    var showed_text = false
       var old = ""
-
       function checksize() {
         let w = window.innerWidth;
         let h = window.innerHeight;
+        if(c_w != w || c_h != h){
+          if(!showed_text){
+            alert("please do not change your window size for optimal game experience")
+          }
+          showed_text = true
+        }
         if(w<500 || h<500){
           if(old == "")old = document.body.innerHTML
           document.body.innerHTML=`<h1 style="color:red;">Your screen size is too small to show the chess board, please adjust the window size</h1>`
@@ -60,17 +69,18 @@
           grid[x][y] = grid[x][y] || {}
           let isDark = (x+y)%2==0
           if(isDark){
-            grid[x][y]["dom"]=`<img src="images/Boards/gray.png" width=37>`
+            grid[x][y]["dom"]=`<img src="images/Boards/gray.png" width=${boardsize/8}>`
           } else {
-            grid[x][y]["dom"]=`<img src="images/Boards/white.png" width=37>`
+            grid[x][y]["dom"]=`<img src="images/Boards/white.png" width=${boardsize/8}>`
           }
         }
       }
       console.log("created 2d grid")
+
       for (let y = 0; y < 8; y++) {
         doc.innerHTML += "<br>"
         for (let x = 0; x < 8; x++) {
-          let toinsert = `<div class="board" id='${x}-${y}' style="left:${x*37+200}px;top:${y*37+100}px">${grid[x][y]['dom']}</div>`
+          let toinsert = `<div class="board" id='${x}-${y}' style="left:${c_w/2-boardsize+x*(boardsize/8)}px;top:${c_h/2-boardsize+y*(boardsize/8)}px">${grid[x][y]['dom']}</div>`
           doc.innerHTML += toinsert
         }
       }
