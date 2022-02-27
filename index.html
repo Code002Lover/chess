@@ -85,9 +85,9 @@
         for (let x = 0; x < 8; x++) {
           let toinsert = `<div class="board" id='${x}-${y}' style="left:${c_w/2-boardsize+x*(boardsize/8)}px;top:${c_h/2-boardsize+y*(boardsize/8)}px">${grid[x][y]['dom']}`
           if(grid[x][y]["isdark"]) {
-            toinsert `<img src="images/pieces/dark/dummy.png" class="piece">`
+            toinsert += `<img src="images/pieces/dark/dummy.png" class="piece">`
           } else {
-            toinsert `<img src="images/pieces/white/dummy.png" class="piece">`
+            toinsert += `<img src="images/pieces/white/dummy.png" class="piece">`
           }
           toinsert += "</div>"
           doc.innerHTML += toinsert
