@@ -11,7 +11,7 @@ body {
 
 #GameRelated1 {
   position: absolute;
-  background-image: url(../images/Boards/Black-Gray.png);
+  /* background-image: url(../images/Boards/Black-Gray.png); */
   background-size: cover;
   image-rendering: pixelated;
   width: 300px;
