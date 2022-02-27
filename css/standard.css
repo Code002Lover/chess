@@ -23,3 +23,12 @@ body {
   display: inline;
   position: absolute;
 }
+
+.piece{
+  filter:brightness(100%);
+}
+
+.piece:hover{
+ filter: brightness(50%);
+ transition: all 0.5s ease;
+}
