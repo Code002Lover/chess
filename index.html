@@ -10,6 +10,7 @@
   </head>
   <body>
     <div id="GameRelated1"></div>
+
     <script>
       var socket;
       function createws(){
@@ -25,16 +26,23 @@
       }
       var grid = {}
       var doc = document.getElementById("GameRelated1");
-      for (let x = 0; x < 8; x++) { //js starts at 0, Fyshi
+      for (let x = 0; x < 8; x++) {
         grid[x] = grid[x] || {}
         for (let y = 0; y < 8; y++) {
           grid[x][y] = grid[x][y] || {}
           let isDark = (x+y)%2==0
           if(isDark){
-            grid[x][y]["dom"]=`<img src="images/Boards/gray.png">`
+            grid[x][y]["dom"]=`<img src="images/Boards/gray.png" width=35>`
           } else {
-            grid[x][y]["dom"]=`<img src="images/Boards/white.png">`
+            grid[x][y]["dom"]=`<img src="images/Boards/white.png" width=35>`
           }
+        }
+      }
+
+      for (let x = 0; x < 8; x++) {
+        for (let y = 0; y < 8; y++) {
+          let toinsert = `<span id='${x}-${y}'>${grid[x][y]['dom']}</span>`
+          doc.innerHTML += toinsert
         }
       }
       console.log("created 2d grid")
