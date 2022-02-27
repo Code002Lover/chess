@@ -112,11 +112,12 @@
           }
 
 
-
-          if(y>=6 && piece!="dummy") {
-            toinsert += `<img src="images/pieces/dark/${piece}.png" class="piece absolute" style="left:0px;top:0px">`
-          } else {
-            toinsert += `<img src="images/pieces/white/${piece}.png" class="piece absolute" style="left:0px;top:0px">`
+          if(piece!="dummy") {
+            if(y>=6) {
+              toinsert += `<img src="images/pieces/dark/${piece}.png" class="piece absolute" style="left:0px;top:0px">`
+            } else {
+              toinsert += `<img src="images/pieces/white/${piece}.png" class="piece absolute" style="left:0px;top:0px">`
+            }
           }
           toinsert += grid[x][y]['dom']
           toinsert += "</div>"
