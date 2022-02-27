@@ -70,7 +70,7 @@
       for (let y = 0; y < 8; y++) {
         doc.innerHTML += "<br>"
         for (let x = 0; x < 8; x++) {
-          let toinsert = `<div class="board" id='${x}-${y}'>${grid[x][y]['dom']}</div>`
+          let toinsert = `<div class="board" id='${x}-${y}' style="left:${x*37+200}px;top:${y*37+100}px">${grid[x][y]['dom']}</div>`
           doc.innerHTML += toinsert
         }
       }
