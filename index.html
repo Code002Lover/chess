@@ -39,9 +39,10 @@
         }
       }
       console.log("created 2d grid")
-      for (let x = 0; x < 8; x++) {
-        for (let y = 0; y < 8; y++) {
-          let toinsert = `<span id='${x}-${y}'>${grid[x][y]['dom']}</span>`
+      for (let y = 0; y < 8; y++) {
+        doc.innerHTML += "<br>"
+        for (let x = 0; x < 8; x++) {
+          let toinsert = `<div class="board" id='${x}-${y}'>${grid[x][y]['dom']}</div>`
           doc.innerHTML += toinsert
         }
       }
