@@ -22,6 +22,7 @@ body {
 .absolute {
   /* display: inline; */
   position: absolute;
+  pointer-events: none;
 }
 
 .piece{
