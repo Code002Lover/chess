@@ -121,9 +121,9 @@
 
         if(piece!="dummy") {
           if(y<6) {
-            toinsert += `<img src="/images/pieces/dark/${piece}.png" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
+            toinsert += `<img src="/images/pieces/dark/${piece}.png" piecetype="dark" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
           } else {
-            toinsert += `<img src="/images/pieces/white/${piece}.png" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
+            toinsert += `<img src="/images/pieces/white/${piece}.png" piecetype="white" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
           }
         }
         toinsert += grid[x][y]['dom']
