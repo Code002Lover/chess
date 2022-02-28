@@ -29,7 +29,7 @@
       bg[0].src="x"
     }
 
-    function clicked_piece(x,y) { console.log(x+" "+y); }
+    function clicked_piece(x,y,ptype,piece) { console.log(x+" "+y); }
 
     let boardsize = 296
     const c_w = window.innerWidth;
@@ -121,9 +121,9 @@
 
         if(piece!="dummy") {
           if(y<6) {
-            toinsert += `<img src="/images/pieces/dark/${piece}.png" piecetype="dark" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
+            toinsert += `<img src="/images/pieces/dark/${piece}.png" piecetype="dark" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'dark','${piece}')">`
           } else {
-            toinsert += `<img src="/images/pieces/white/${piece}.png" piecetype="white" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y})">`
+            toinsert += `<img src="/images/pieces/white/${piece}.png" piecetype="white" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'white','${piece}')">`
           }
         }
         toinsert += grid[x][y]['dom']
