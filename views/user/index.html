@@ -28,12 +28,13 @@
     var highlighting = []
 
     function highlight_background(x,y) {
+
       let div = document.getElementById(x+"-"+y)
       if(div == null)return
       let bg = div.getElementsByClassName("bg")
       if(bg == null)return
-      if(bg[0].src!="x"){
-        bg[0].src="x"
+      if(bg[0].src!="https://infiniteonline.ga/images/Boards/green.png"){
+        bg[0].src="https://infiniteonline.ga/images/Boards/green.png"
       } else {
         if(board[x][y]["isdark"]) {
           bg[0].src = "/images/Boards/gray.png"
