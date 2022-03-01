@@ -28,7 +28,10 @@
     var highlighting = {}
 
     function highlight(x,y){
-      highlighting[highlighting.length]={["x"]=x,["y"]=y}
+      highlighting[highlighting.length]={
+        ["x"]:x,
+        ["y"]:y
+      }
       highlight_background(x,y)
     }
 
