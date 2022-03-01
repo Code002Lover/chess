@@ -27,19 +27,28 @@
     console.warn("current chess version: " + version);
     var highlighting = []
 
+    var last_clicked_piece
+
+    function clicked_bg(x,y) {
+      console.log("clicked bg at " + x + "," + y);
+    }
+
     function highlight_background(x,y) {
 
       let div = document.getElementById(x+"-"+y)
       if(div == null)return
       let bg = div.getElementsByClassName("bg")
       if(bg == null)return
-      if(bg[0].src!="https://infiniteonline.ga/images/Boards/green.png"){
-        bg[0].src="https://infiniteonline.ga/images/Boards/green.png"
+      bg = bg[0]
+      if(bg.src!="https://infiniteonline.ga/images/Boards/green.png"){
+        bg.src="https://infiniteonline.ga/images/Boards/green.png"
+        bg.onclick=`clicked_bg(${x},${y})`
       } else {
+        bg.onclick=""
         if(grid[x][y]["isdark"]) {
-          bg[0].src = "/images/Boards/gray.png"
+          bg.src = "/images/Boards/gray.png"
         } else {
-          bg[0].src = "/images/Boards/white.png"
+          bg.src = "/images/Boards/white.png"
         }
       }
     }
@@ -59,6 +68,7 @@
       highlighting = []
       let div = document.getElementById(x+"-"+y)
       let pie = div.getElementsByClassName("piece")
+      last_clicked_piece = pie
       console.log(ptype+" "+piece+" at "+x+" "+y);
       if(piece=="Pawn"){
         if(ptype=="White"){
@@ -83,7 +93,6 @@
         highlight(x,y-1)
 
       }
-
       if(piece=="Knight") {
         highlight(x+2,y+1)
         highlight(x+2,y-1)
