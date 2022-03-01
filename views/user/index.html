@@ -71,13 +71,16 @@
       }
       if(piece=="King") {
         highlight(x+1,y+1)
+        highlight(x-1,y-1)
+
         highlight(x+1,y-1)
         highlight(x-1,y+1)
-        highlight(x-1,y-1)
+
         highlight(x+1,y)
         highlight(x,y+1)
-        highlight(x-1,y+1)
-        highlight(x+1,y-1)
+
+        highlight(x-1,y)
+        highlight(x,y-1)
 
       }
 
