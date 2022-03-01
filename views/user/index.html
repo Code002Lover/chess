@@ -25,18 +25,44 @@
 
     const version = 0.1
     console.warn("current chess version: " + version);
+    var highlighting = {}
 
-    function highlight_background(x,y) {
-      let div = document.getElementById(x+"-"+y)
-      let bg = div.getElementsByClassName("bg")
-      bg[0].src="x"
+    function highlight(x,y){
+      highlighting[highlighting.length]={["x"]=x,["y"]=y}
+      highlight_background(x,y)
+    }
+
+    function highlight_dark_piece(x,y,piece) {
+      if(piece == "Pawn") {
+        highlight(x+1,y+1)
+        highlight(x-1,y+1)
+      }
+    }
+
+    function highlight_white_piece(x,y,piece) {
+      if(piece == "Pawn") {
+        highlight(x+1,y-1)
+        highlight(x-1,y-1)
+      }
     }
 
     function clicked_piece(x,y,ptype,piece) {
+      for (let i = 0; i < highlighting.length; i++) {
+        highlight_background(highlighting[i]["x"],highlighting[i]["y"])
+      }
+      highlighting = {}
       let div = document.getElementById(x+"-"+y)
       let pie = div.getElementsByClassName("piece")
       console.log(ptype+" "+piece+" at "+x+" "+y);
-      console.log("piece DOM node: " + pie)
+      switch (ptype) {
+        case "White":
+          highlight_white_piece(x,y,piece)
+          break;
+        default:
+          highlight_dark_piece(x,y,piece)
+          break
+      }
+
     }
 
     let boardsize = 296
@@ -95,6 +121,20 @@
       }
     }
     console.log("created 2d grid")
+
+    function highlight_background(x,y) {
+      let div = document.getElementById(x+"-"+y)
+      let bg = div.getElementsByClassName("bg")
+      if(bg[0].src!="x"){
+        bg[0].src="x"
+      } else {
+        if(board[x][y]["isdark"]) {
+          bg[0].src = "/images/Boards/gray.png"
+        } else {
+          bg[0].src = "/images/Boards/white.png"
+        }
+      }
+    }
 
     for (let y = 0; y < 8; y++) {
       doc.innerHTML += "<br>"
