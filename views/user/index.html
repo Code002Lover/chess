@@ -29,7 +29,12 @@
       bg[0].src="x"
     }
 
-    function clicked_piece(x,y,ptype,piece) { console.log(ptype+" "+piece+" at "+x+" "+y); }
+    function clicked_piece(x,y,ptype,piece) {
+      let div = document.getElementById(x+"-"+y)
+      let pie = div.getElementsByClassName("piece")
+      console.log(ptype+" "+piece+" at "+x+" "+y);
+      console.log("piece DOM node: " + pie)
+    }
 
     let boardsize = 296
     const c_w = window.innerWidth;
