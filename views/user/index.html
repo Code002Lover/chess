@@ -84,6 +84,20 @@
 
       }
 
+      if(piece=="Knight") {
+        highlight(x+2,y+1)
+        highlight(x+2,y-1)
+
+        highlight(x-2,y+1)
+        highlight(x-2,y-1)
+
+        highlight(x+1,y-2)
+        highlight(x+1,y+2)
+
+        highlight(x-1,y+2)
+        highlight(x-1,y-2)
+      }
+
     }
 
     let boardsize = 296
