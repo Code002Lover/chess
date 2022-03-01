@@ -55,7 +55,7 @@
       for (let i = 0; i < highlighting.length; i++) {
         highlight_background(highlighting[i]["x"],highlighting[i]["y"])
       }
-      highlighting = {}
+      highlighting = []
       let div = document.getElementById(x+"-"+y)
       let pie = div.getElementsByClassName("piece")
       console.log(ptype+" "+piece+" at "+x+" "+y);
