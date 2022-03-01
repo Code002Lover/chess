@@ -160,9 +160,9 @@
         let isDark = (x+y)%2==1
         grid[x][y]["isdark"]=isDark
         if(isDark){
-          grid[x][y]["dom"]=`<img src="/images/Boards/gray.png"  class="bg" width=${boardsize/8} height=${boardsize/8}>`
+          grid[x][y]["dom"]=`<img src="/images/Boards/gray.png"  class="bg" width=${boardsize/8} height=${boardsize/8} draggable="false">`
         } else {
-          grid[x][y]["dom"]=`<img src="/images/Boards/white.png" class="bg" width=${boardsize/8} height=${boardsize/8}>`
+          grid[x][y]["dom"]=`<img src="/images/Boards/white.png" class="bg" width=${boardsize/8} height=${boardsize/8} draggable="false">`
         }
       }
     }
