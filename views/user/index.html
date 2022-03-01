@@ -25,7 +25,23 @@
 
     const version = 0.1
     console.warn("current chess version: " + version);
-    var highlighting = {}
+    var highlighting = []
+
+    function highlight_background(x,y) {
+      let div = document.getElementById(x+"-"+y)
+      if(div == null)return
+      let bg = div.getElementsByClassName("bg")
+      if(bg == null)return
+      if(bg[0].src!="x"){
+        bg[0].src="x"
+      } else {
+        if(board[x][y]["isdark"]) {
+          bg[0].src = "/images/Boards/gray.png"
+        } else {
+          bg[0].src = "/images/Boards/white.png"
+        }
+      }
+    }
 
     function highlight(x,y){
       highlighting[highlighting.length]={
@@ -122,22 +138,6 @@
       }
     }
     console.log("created 2d grid")
-
-    function highlight_background(x,y) {
-      let div = document.getElementById(x+"-"+y)
-      if(div == null)return
-      let bg = div.getElementsByClassName("bg")
-      if(bg == null)return
-      if(bg[0].src!="x"){
-        bg[0].src="x"
-      } else {
-        if(board[x][y]["isdark"]) {
-          bg[0].src = "/images/Boards/gray.png"
-        } else {
-          bg[0].src = "/images/Boards/white.png"
-        }
-      }
-    }
 
     for (let y = 0; y < 8; y++) {
       doc.innerHTML += "<br>"
