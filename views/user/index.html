@@ -35,20 +35,6 @@
       highlight_background(x,y)
     }
 
-    function highlight_dark_piece(x,y,piece) {
-      if(piece == "Pawn") {
-        highlight(x+1,y+1)
-        highlight(x-1,y+1)
-      }
-    }
-
-    function highlight_white_piece(x,y,piece) {
-      if(piece == "Pawn") {
-        highlight(x+1,y-1)
-        highlight(x-1,y-1)
-      }
-    }
-
     function clicked_piece(x,y,ptype,piece) {
       for (let i = 0; i < highlighting.length; i++) {
         highlight_background(highlighting[i]["x"],highlighting[i]["y"])
@@ -57,13 +43,25 @@
       let div = document.getElementById(x+"-"+y)
       let pie = div.getElementsByClassName("piece")
       console.log(ptype+" "+piece+" at "+x+" "+y);
-      switch (ptype) {
-        case "White":
-          highlight_white_piece(x,y,piece)
-          break;
-        default:
-          highlight_dark_piece(x,y,piece)
-          break
+      if(piece=="Pawn"){
+        if(ptype=="White"){
+          highlight(x+1,y-1)
+          highlight(x-1,y-1)
+        } else {
+          highlight(x+1,y+1)
+          highlight(x-1,y+1)
+        }
+      }
+      if(piece=="King") {
+        highlight(x+1,y+1)
+        highlight(x+1,y-1)
+        highlight(x-1,y+1)
+        highlight(x-1,y-1)
+        highlight(x+1,y)
+        highlight(x,y+1)
+        highlight(x-1,y+1)
+        highlight(x+1,y-1)
+
       }
 
     }
