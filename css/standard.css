@@ -25,7 +25,7 @@ body {
 }
 
 .bg {
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .piece{
