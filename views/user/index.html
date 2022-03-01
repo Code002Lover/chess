@@ -125,7 +125,9 @@
 
     function highlight_background(x,y) {
       let div = document.getElementById(x+"-"+y)
+      if(div == null)return
       let bg = div.getElementsByClassName("bg")
+      if(bg == null)return
       if(bg[0].src!="x"){
         bg[0].src="x"
       } else {
