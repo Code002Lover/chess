@@ -71,10 +71,12 @@
       last_clicked_piece = pie
       console.log(ptype+" "+piece+" at "+x+" "+y);
       if(piece=="Pawn"){
-        if(ptype=="White"){
+        if(ptype=="white"){
+          highlight(x,y-1)
           highlight(x+1,y-1)
           highlight(x-1,y-1)
         } else {
+          highlight(x,y+1)
           highlight(x+1,y+1)
           highlight(x-1,y+1)
         }
