@@ -30,6 +30,21 @@
     var last_clicked_piece
 
     function clicked_bg(x,y) {
+
+      for (let i = 0; i < highlighting.length; i++) {
+        highlight_background(highlighting[i]["x"],highlighting[i]["y"])
+      }
+      highlighting = []//unhighlights them
+      // last_clicked_piece == current piece / piece to move
+      //(x,y) == place to move it to
+      let piece = last_clicked_piece.piece
+      let piecetype = last_clicked_piece.piecetype
+
+      let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`
+      document.getElementById(x+"-"+y).innerHTML += toinsert
+      last_clicked_piece.remove()
+      //how can I move them
+
       console.log("clicked bg at " + x + "," + y);
     }
 
@@ -224,9 +239,9 @@
 
         if(piece!="dummy") {
           if(y<6) {
-            toinsert += `<img src="/images/pieces/dark/${piece}.png" piecetype="dark" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'dark','${piece}')">`
+            toinsert += `<img src="/images/pieces/dark/${piece}.png" piece="${piece}" piecetype="dark" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'dark','${piece}')">`
           } else {
-            toinsert += `<img src="/images/pieces/white/${piece}.png" piecetype="white" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'white','${piece}')">`
+            toinsert += `<img src="/images/pieces/white/${piece}.png" piece="${piece}" piecetype="white" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'white','${piece}')">`
           }
         }
         toinsert += grid[x][y]['dom']
