@@ -26,15 +26,6 @@
     const version = 0.15
     console.warn("current chess version: " + version);
 
-    function removeImage(el){
-        if(!el.previousSibling.tagName){//if it is textnode like newline etc. we go one back
-            var el = el.previousSibling;
-        }
-        if(el.previousSibling.tagName && el.previousSibling.tagName=='IMG'){
-            el.previousSibling.remove();
-        }
-    }
-
     var highlighting = []
 
     var last_clicked_piece
@@ -52,7 +43,7 @@
 
       let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`
       document.getElementById(x+"-"+y).innerHTML += toinsert
-      removeImage(last_clicked_piece)
+      document.getElementById(last_clicked_piece[0].x+"-"+last_clicked_piece[0].y).innerHTML = document.getElementById(last_clicked_piece[0].x+"-"+last_clicked_piece[0].y).innerHTML.replace(last_clicked_piece[0],"")
       //how can I move them
 
       console.log("clicked bg at " + x + "," + y);
