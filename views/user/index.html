@@ -17,7 +17,7 @@
   </head>
   <body>
 
-    <div id="GameRelated1"></div>
+    <div id="maindiv"></div>
 
 
 
@@ -119,16 +119,16 @@
             highlight(x+i,y)
             highlight(x,y-i)
             highlight(x,y+i)
-          }        
+          }
       }
-      
+
       if(piece=="Bishop" || piece=="Queen"){
         for(let i = 1;i<=8;i++){
             highlight(x+i,y+i)
             highlight(x+i,y-i)
             highlight(x-i,y+i)
             highlight(x-i,y-i)
-          }   
+          }
       }
 
 
@@ -175,7 +175,7 @@
       });
     }
     var grid = {}
-    var doc = document.getElementById("GameRelated1");
+    var doc = document.getElementById("maindiv");
     for (let x = 0; x < 8; x++) {
       grid[x] = grid[x] || {}
       for (let y = 0; y < 8; y++) {
