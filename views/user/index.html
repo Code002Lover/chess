@@ -45,8 +45,8 @@
 
       let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`
       document.getElementById(x+"-"+y).innerHTML += toinsert
-
-      document.getElementById(last_clicked_piece.x+"-"+last_clicked_piece.y).innerHTML = document.getElementById(last_clicked_piece.x+"-"+last_clicked_piece.y).innerHTML.replace(last_clicked_piece["html"],"")
+      let div = document.getElementById(last_clicked_piece.x+"-"+last_clicked_piece.y)
+      div.innerHTML = div.innerHTML.replace(last_clicked_piece["html"],"")
       //how can I move them
 
       console.log("clicked bg at " + x + "," + y);
@@ -87,13 +87,14 @@
       highlighting = []
       let div = document.getElementById(x+"-"+y)
       let pie = div.getElementsByClassName("piece")
-      if(last_clicked_piece["html"]==pie.innerHTML && last_clicked_piece["html"]!=null){
+      let newhtml = `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`
+      if(last_clicked_piece["html"]==newhtml && last_clicked_piece["html"]!=null){
         console.log("last_clicked_piece: ",last_clicked_piece)
         last_clicked_piece={}
         return
       }
       last_clicked_piece = {
-        ["html"]:pie,
+        ["html"]: newhtml,
         ["x"]: x,
         ["y"]: y,
         ["piece"]: piece,
@@ -249,11 +250,9 @@
 
 
         if(piece!="dummy") {
-          if(y<6) {
-            toinsert += `<img src="/images/pieces/dark/${piece}.png" piece="${piece}" piecetype="dark" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'dark','${piece}')">`
-          } else {
-            toinsert += `<img src="/images/pieces/white/${piece}.png" piece="${piece}" piecetype="white" draggable="false" class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'white','${piece}')">`
-          }
+          let ptype = "white"
+          if(y<6)ptype="dark"
+          toinsert += `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`
         }
         toinsert += grid[x][y]['dom']
         toinsert += "</div>"
