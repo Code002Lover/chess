@@ -30,7 +30,7 @@
     var last_clicked_piece
 
     function clicked_bg(x,y) {
-
+      if(last_clicked_piece==null)return
       for (let i = 0; i < highlighting.length; i++) {
         highlight_background(highlighting[i]["x"],highlighting[i]["y"])
       }
