@@ -42,6 +42,7 @@
       bg = bg[0]
       if(bg.src!="https://infiniteonline.ga/images/Boards/green.png"){
         bg.onclick=`clicked_bg(${x},${y})`
+        console.log("onclick: "+bg.onclick)
         bg.src="https://infiniteonline.ga/images/Boards/green.png"
       } else {
         bg.onclick=""
