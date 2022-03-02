@@ -41,8 +41,8 @@
       if(bg == null)return
       bg = bg[0]
       if(bg.src!="https://infiniteonline.ga/images/Boards/green.png"){
-        bg.src="https://infiniteonline.ga/images/Boards/green.png"
         bg.onclick=`clicked_bg(${x},${y})`
+        bg.src="https://infiniteonline.ga/images/Boards/green.png"
       } else {
         bg.onclick=""
         if(grid[x][y]["isdark"]) {
