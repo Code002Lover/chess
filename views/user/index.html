@@ -317,7 +317,7 @@
               continue;
             }
             bg = bg.outerHTML
-            div.innerHTML = bg + new_pieces[x][y]
+            div.innerHTML = (bg + new_pieces[x][y]).replace(/\"null\"/,"")
           }
         }
       });
