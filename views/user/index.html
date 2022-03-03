@@ -74,7 +74,7 @@
       for (let x = 0; x < 8; x++) {
         for (let y = 0; y < 8; y++) {
           try {
-            document.getElementById(x+"-"+y).getElementsByClassName("bg")[0].onclick=""
+            document.getElementById(x+"-"+y).getElementsByClassName("bg")[0].setAttribute('onclick',"")
           } catch (e) {}
         }
       }
@@ -125,7 +125,7 @@
         bg.setAttribute('onclick',`clicked_bg(${x},${y})`)
         bg.src="https://infiniteonline.ga/images/Boards/green.png"
       } else {
-        bg.onclick=""
+        bg.setAttribute('onclick',"")
         if(grid[x][y]["isdark"]) {
           bg.src = "/images/Boards/gray.png"
         } else {
