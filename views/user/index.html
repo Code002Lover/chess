@@ -87,14 +87,13 @@
       highlighting = []
       let div = document.getElementById(x+"-"+y)
       let pie = div.getElementsByClassName("piece")
-      let newhtml = `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`
-      if(last_clicked_piece["html"]==newhtml && last_clicked_piece["html"]!=null){
+      if(last_clicked_piece["x"]==x && last_clicked_piece["y"]==y){
         console.log("last_clicked_piece: ",last_clicked_piece)
         last_clicked_piece={}
         return
       }
       last_clicked_piece = {
-        ["html"]: newhtml,
+        ["html"]: pie.outerHTML,
         ["x"]: x,
         ["y"]: y,
         ["piece"]: piece,
