@@ -212,7 +212,7 @@
     checksize()
 
     function createws(){
-      socket = new WebSocket('ws://ftp.infiniteonline.ga:3001');
+      socket = new WebSocket('wss://ftp.infiniteonline.ga:3001');
       socket.addEventListener('open', function (event) {
           // TODO: verify to the server with the acc
       });
