@@ -86,6 +86,7 @@
       }
       highlighting = []
       let div = document.getElementById(x+"-"+y)
+      // TODO: when piece that can be "killed" is clicked, remove it and move piece to there
       let pie = div.getElementsByClassName("piece")[0]
       if(last_clicked_piece["x"]==x && last_clicked_piece["y"]==y){
         console.log("last_clicked_piece: ",last_clicked_piece)
@@ -111,6 +112,26 @@
           highlight(x-1,y+1)
         }
       }
+      let moves = {
+        ["King"]: [
+          [x+1,y+1],
+          [x-1,y-1],
+          [x+1,y-1],
+          [x-1,y+1],
+          [x+1,y],
+          [x,y+1],
+          [x-1,y],
+          [x,y-1],
+        ]
+      }
+      if(moves[piece]!=null){
+        for (var i = 0; i < moves[piece].length; i++) {
+          highlight(moves[piece][i][0],moves[piece][i][1])
+        }
+        console.log("used moves array");
+        return
+      }
+      console.warn("didn't use moves array");
       if(piece=="King") {
         highlight(x+1,y+1)
         highlight(x-1,y-1)
@@ -158,7 +179,7 @@
       }
 
 
-    }
+    } //end piece move
 
     let boardsize = 296
     const c_w = window.innerWidth;
