@@ -291,6 +291,9 @@
             current_pieces[x][y]=piece
           }
         }
+        if(chess_debug){
+          console.log("event data",event.data);
+        }
         let new_pieces = JSON.parse(event.data)
         if(current_pieces.equals(new_pieces))return "already up to date"
         for (let x = 0; x < 8; x++) {
