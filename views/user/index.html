@@ -26,6 +26,8 @@
     const version = 0.2
     console.warn("current chess version: " + version);
 
+    var socket;
+
     var highlighting = []
 
     var last_clicked_piece = {}
@@ -47,7 +49,7 @@
       document.getElementById(x+"-"+y).innerHTML += toinsert
       let div = document.getElementById(last_clicked_piece.x+"-"+last_clicked_piece.y)
       div.innerHTML = div.innerHTML.replace(last_clicked_piece["html"],"")
-      //how can I move them
+      socket.send(["update-board",document.getElementById("maindiv").innerHTML]) //I know this is a huge security risk
 
       console.log("clicked bg at " + x + "," + y);
     }
@@ -209,15 +211,13 @@
 
     checksize()
 
-    var socket;
     function createws(){
-      socket = new WebSocket('ws://ftp.infiniteonline.ga'); // TODO: add websocketserver
+      socket = new WebSocket('ws://ftp.infiniteonline.ga:3001');
       socket.addEventListener('open', function (event) {
-          socket.send('Hello Server!');
           // TODO: verify to the server with the acc
       });
       socket.addEventListener('message', function (event) {
-          console.log('Message from server ', event.data);
+          document.getElementById("maindiv").innerHTML = event.data
           // TODO: handle info
       });
     }
