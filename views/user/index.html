@@ -306,6 +306,7 @@
         if(current_pieces.equals(new_pieces))return "already up to date"
         for (let x = 0; x < 8; x++) {
           for (let y = 0; y < 8; y++) {
+            if(new_pieces[x][y]==current_pieces[x][y])continue;
             let div = document.getElementById(x+"-"+y)
             if(div==null){
               console.warn("div==null??",x,y);
