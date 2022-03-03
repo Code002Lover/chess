@@ -269,9 +269,10 @@
           // TODO: verify to the server with the acc
       });
       socket.addEventListener('message', function (event) {
-        event.data = `[${event.data}]`
-        event.data = event.data.replace(/\,\,/g,",null,")
-        console.log("received new info about the game!",event.data);
+        let data = event.data
+        data = `[${data}]`
+        data = data.replace(/\,\,/g,",null,")
+        console.log("received new info about the game!",data);
 
         let current_pieces = []
         for (let x = 0; x < 8; x++) {
@@ -295,9 +296,9 @@
           }
         }
         if(chess_debug){
-          console.log("event data",event.data);
+          console.log("event data",data);
         }
-        let new_pieces = JSON.parse(event.data)
+        let new_pieces = JSON.parse(data)
         if(current_pieces.equals(new_pieces))return "already up to date"
         for (let x = 0; x < 8; x++) {
           for (let y = 0; y < 8; y++) {
