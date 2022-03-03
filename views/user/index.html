@@ -214,9 +214,11 @@
     function createws(){
       socket = new WebSocket('wss://ftp.infiniteonline.ga:3001');
       socket.addEventListener('open', function (event) {
+        console.log("opened a connection to the game server!");
           // TODO: verify to the server with the acc
       });
       socket.addEventListener('message', function (event) {
+          console.log("received new info about the game!",event.data);
           document.getElementById("maindiv").innerHTML = event.data
           // TODO: handle info
       });
