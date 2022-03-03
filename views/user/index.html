@@ -270,8 +270,11 @@
       });
       socket.addEventListener('message', function (event) {
         let data = event.data
-        data = `[${data}]`
-        data = data.replace(/\,\,/g,",null,")
+        data = `[\`${data}\`]`
+        for (var i = 0; i < 8; i++) {
+          data = data.replace(/\,\,/g,",null,")
+        }
+        data = data.replace(/\>\,\</,"\>\`\,\`\<")
         console.log("received new info about the game!",data);
 
         let current_pieces = []
