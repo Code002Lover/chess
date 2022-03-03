@@ -133,6 +133,12 @@
       highlight_background(x,y)
     }
 
+    function haspiece(x,y) {
+      let div = document.getElementById(x+"-"+y)
+      if(div==null)return false
+      return div.getElementsByClassName("piece")[0]!=null
+    }
+
     function clicked_piece(x,y,ptype,piece) {
       for (let i = 0; i < highlighting.length; i++) {
         highlight_background(highlighting[i]["x"],highlighting[i]["y"])
@@ -156,13 +162,13 @@
       console.log(ptype+" "+piece+" at "+x+" "+y);
       if(piece=="Pawn"){
         if(ptype=="white"){
-          highlight(x,y-1)
-          highlight(x+1,y-1)
-          highlight(x-1,y-1)
+          if(!haspiece(x,y-1))highlight(x,y-1)
+          if(haspiece(x+1,y-1))highlight(x+1,y-1)
+          if(haspiece(x-1,y-1))highlight(x-1,y-1)
         } else {
-          highlight(x,y+1)
-          highlight(x+1,y+1)
-          highlight(x-1,y+1)
+          if(!haspiece(x,y+1))highlight(x,y+1)
+          if(haspiece(x+1,y+1))highlight(x+1,y+1)
+          if(haspiece(x-1,y+1))highlight(x-1,y+1)
         }
       }
       let moves = {
