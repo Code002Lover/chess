@@ -70,6 +70,15 @@
       for (let i = 0; i < highlighting.length; i++) {
         highlight_background(highlighting[i]["x"],highlighting[i]["y"])
       }
+
+      for (let x = 0; x < 8; x++) {
+        for (let y = 0; y < 8; y++) {
+          try {
+            document.getElementById(x+"-"+y).getElementsByClassName("bg")[0].onclick=""
+          } catch (e) {}
+        }
+      }
+
       highlighting = []//unhighlights them
       // last_clicked_piece == current piece / piece to move
       //(x,y) == place to move it to
