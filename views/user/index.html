@@ -275,28 +275,29 @@
         console.log("received new info about the game!",event.data);
 
         let current_pieces = []
-
-        for (let y = 0; y < 8; y++) {
-          let div = document.getElementById(x+"-"+y)
-          if(div==null){
-            console.warn("div==null??",x,y);
-            continue;
+        for (let x = 0; x < 8; x++) {
+          for (let y = 0; y < 8; y++) {
+            let div = document.getElementById(x+"-"+y)
+            if(div==null){
+              console.warn("div==null??",x,y);
+              continue;
+            }
+            console.log("pieces",div.getElementsByClassName("piece"))
+            console.log("pieceslength",div.getElementsByClassName("piece").length-1)
+            console.log("piece",div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1])
+            let piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1]
+            if(piece==null){
+              console.warn("piece==null",x,y);
+              continue;
+            }
+            piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1].outerHTML
+            pieces[x][y]=piece
           }
-          console.log("pieces",div.getElementsByClassName("piece"))
-          console.log("pieceslength",div.getElementsByClassName("piece").length-1)
-          console.log("piece",div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1])
-          let piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1]
-          if(piece==null){
-            console.warn("piece==null",x,y);
-            continue;
-          }
-          piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1].outerHTML
-          pieces[x][y]=piece
         }
         let new_pieces = JSON.parse(event.data)
         if(current_pieces.equals(new_pieces))return "already up to date"
         for (let x = 0; x < 8; x++) {
-          for (var y = 0; y < 8; y++) {
+          for (let y = 0; y < 8; y++) {
             let div = document.getElementById(x+"-"+y)
             if(div==null){
               console.warn("div==null??",x,y);
