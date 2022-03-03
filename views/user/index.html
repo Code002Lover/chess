@@ -100,7 +100,7 @@
         }
       }
 
-      socket.send("update-board"+pieces) //I know this is a huge security risk
+      socket.send("update-board"+JSON.stringify(pieces)) //I know this is a huge security risk
 
       console.log("clicked bg at " + x + "," + y);
     }
@@ -270,12 +270,12 @@
       });
       socket.addEventListener('message', function (event) {
         let data = event.data
-        data = data.replace(/\"/g,"\\\"")
-        data = `["${data}"]`
-        for (var i = 0; i < 8; i++) {
-          data = data.replace(/\,\,/g,",null,")
-        }
-        data = data.replace(/\>\,\</,'\>\","\<')
+        // data = data.replace(/\"/g,"\\\"")
+        // data = `["${data}"]`
+        // for (var i = 0; i < 8; i++) {
+        //   data = data.replace(/\,\,/g,",null,")
+        // }
+        // data = data.replace(/\>\,\</,'\>\","\<')
         console.log("received new info about the game!",data);
 
         let current_pieces = []
