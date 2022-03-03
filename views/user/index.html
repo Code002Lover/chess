@@ -276,6 +276,7 @@
 
         let current_pieces = []
         for (let x = 0; x < 8; x++) {
+          current_pieces[x]=[]
           for (let y = 0; y < 8; y++) {
             let div = document.getElementById(x+"-"+y)
             if(div==null){
@@ -291,7 +292,7 @@
               continue;
             }
             piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1].outerHTML
-            pieces[x][y]=piece
+            current_pieces[x][y]=piece
           }
         }
         let new_pieces = JSON.parse(event.data)
