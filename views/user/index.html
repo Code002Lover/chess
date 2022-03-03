@@ -19,7 +19,37 @@
 
     <div id="maindiv"></div>
 
+    <script type="text/javascript">
+          // Warn if overriding existing method
+      if(Array.prototype.equals)
+        console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+      // attach the .equals method to Array's prototype to call it on any array
+      Array.prototype.equals = function (array) {
+        // if the other array is a falsy value, return
+        if (!array)
+            return false;
 
+        // compare lengths - can save a lot of time
+        if (this.length != array.length)
+            return false;
+
+        for (var i = 0, l=this.length; i < l; i++) {
+            // Check if we have nested arrays
+            if (this[i] instanceof Array && array[i] instanceof Array) {
+                // recurse into the nested arrays
+                if (!this[i].equals(array[i]))
+                    return false;
+            }
+            else if (this[i] != array[i]) {
+                // Warning - two different object instances will never be equal: {x:20} != {x:20}
+                return false;
+            }
+        }
+        return true;
+      }
+      // Hide method from for-in loops
+      Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+    </script>
 
     <script>
 
@@ -49,7 +79,19 @@
       document.getElementById(x+"-"+y).innerHTML += toinsert
       let div = document.getElementById(last_clicked_piece.x+"-"+last_clicked_piece.y)
       div.innerHTML = div.innerHTML.replace(last_clicked_piece["html"],"")
-      socket.send(["update-board",document.getElementById("maindiv").innerHTML]) //I know this is a huge security risk
+
+      let pieces = []
+
+      for (let x = 0; x < 8; x++) {
+        pieces[x] = []
+        for (var y = 0; y < 8; y++) {
+          let div = document.getElementById(x+"-"+y)
+          let piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1].outerHTML
+          pieces[x][y]=piece
+        }
+      }
+
+      socket.send("update-board"+pieces) //I know this is a huge security risk
 
       console.log("clicked bg at " + x + "," + y);
     }
@@ -193,7 +235,7 @@
       let h = window.innerHeight;
       if(c_w != w || c_h != h){
         if(!showed_text){
-          alert("please do not change your window size for optimal game experience")
+          console.warn("please do not change your window size for optimal game experience") //changed for better experience lol
         }
         showed_text = true
       }
@@ -218,9 +260,27 @@
           // TODO: verify to the server with the acc
       });
       socket.addEventListener('message', function (event) {
-          console.log("received new info about the game!",event.data);
-          document.getElementById("maindiv").innerHTML = event.data
-          // TODO: handle info
+        console.log("received new info about the game!",event.data);
+
+        let current_pieces = []
+
+        for (let x = 0; x < 8; x++) {
+          current_pieces[x] = []
+          for (var y = 0; y < 8; y++) {
+            let div = document.getElementById(x+"-"+y)
+            let piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1].outerHTML
+            current_pieces[x][y]=piece
+          }
+        }
+        let new_pieces = JSON.parse(event.data)
+        if(current_pieces.equals(new_pieces))return "already up to date"
+        for (let x = 0; x < 8; x++) {
+          for (var y = 0; y < 8; y++) {
+            let div = document.getElementById(x+"-"+y)
+            let bg = div.getElementsByClassName("bg")[0].outerHTML
+            div.innerHTML = bg + new_pieces[x][y]
+          }
+        }
       });
     }
     var grid = {}
