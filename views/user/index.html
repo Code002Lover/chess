@@ -313,6 +313,9 @@
         for (let x = 0; x < 8; x++) {
           for (let y = 0; y < 8; y++) {
             if(new_pieces[x][y]==current_pieces[x][y])continue;
+            if(new_pieces[x][y]==null)new_pieces[x][y]=""
+            if(new_pieces[x][y]=="null")new_pieces[x][y]=""
+            if(new_pieces[x][y]=="undefined")new_pieces[x][y]=""
             let div = document.getElementById(x+"-"+y)
             if(div==null){
               console.warn("div==null??",x,y);
