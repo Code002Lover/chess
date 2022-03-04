@@ -7,392 +7,889 @@
     <title>(╯°□°）╯︵ ┻━┻</title>
     <link rel="stylesheet" href="/css/standard.css" />
     <script language="javascript" type="text/javascript">
-    function windowClose() {
-      window.open('','_parent','');
-      window.close();
-    }
+      function windowClose() {
+        window.open("", "_parent", "");
+        window.close();
+      }
     </script>
-    </script>
+
     <!-- <script src="/js/init.js"></script> -->
   </head>
   <body>
-
     <div id="maindiv"></div>
 
     <script type="text/javascript">
-          // Warn if overriding existing method
-      if(Array.prototype.equals)
-        console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+      // Warn if overriding existing method
+      if (Array.prototype.equals)
+        console.warn(
+          "Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code."
+        );
       // attach the .equals method to Array's prototype to call it on any array
       Array.prototype.equals = function (array) {
         // if the other array is a falsy value, return
-        if (!array)
-            return false;
+        if (!array) return false;
 
         // compare lengths - can save a lot of time
-        if (this.length != array.length)
-            return false;
+        if (this.length != array.length) return false;
 
-        for (var i = 0, l=this.length; i < l; i++) {
-            // Check if we have nested arrays
-            if (this[i] instanceof Array && array[i] instanceof Array) {
-                // recurse into the nested arrays
-                if (!this[i].equals(array[i]))
-                    return false;
-            }
-            else if (this[i] != array[i]) {
-                // Warning - two different object instances will never be equal: {x:20} != {x:20}
-                return false;
-            }
+        for (var i = 0, l = this.length; i < l; i++) {
+          // Check if we have nested arrays
+          if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i])) return false;
+          } else if (this[i] != array[i]) {
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;
+          }
         }
         return true;
-      }
+      };
       // Hide method from for-in loops
-      Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+      Object.defineProperty(Array.prototype, "equals", { enumerable: false });
     </script>
 
     <script>
+      const version = 0.2;
+      console.warn("current chess version: " + version);
 
-    const version = 0.2
-    console.warn("current chess version: " + version);
+      var socket;
+      var chess_debug = true;
 
-    var socket;
-    var chess_debug = true;
+      var highlighting = [];
 
-    var highlighting = []
+      var last_clicked_piece = {};
 
-    var last_clicked_piece = {}
+      function clicked_bg(x, y) {
+        if (last_clicked_piece == null) return;
+        if (last_clicked_piece == {}) return;
 
-    function clicked_bg(x,y) {
-      if(last_clicked_piece==null)return
-      if(last_clicked_piece=={})return
-
-      for (let i = 0; i < highlighting.length; i++) {
-        highlight_background(highlighting[i]["x"],highlighting[i]["y"])
-      }
-
-      for (let x = 0; x < 8; x++) {
-        for (let y = 0; y < 8; y++) {
-          try {
-            document.getElementById(x+"-"+y).getElementsByClassName("bg")[0].setAttribute('onclick',"")
-          } catch (e) {}
+        for (let i = 0; i < highlighting.length; i++) {
+          highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
         }
-      }
 
-      highlighting = []//unhighlights them
-      // last_clicked_piece == current piece / piece to move
-      //(x,y) == place to move it to
-      let piece = last_clicked_piece.piece
-      let piecetype = last_clicked_piece.ptype
-
-      let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`
-      document.getElementById(x+"-"+y).innerHTML += toinsert
-      let div = document.getElementById(last_clicked_piece.x+"-"+last_clicked_piece.y)
-      div.innerHTML = div.innerHTML.replace(last_clicked_piece["html"],"")
-
-      let pieces = []
-
-      for (let x = 0; x < 8; x++) {
-        pieces[x] = []
-        for (let y = 0; y < 8; y++) {
-          let div = document.getElementById(x+"-"+y)
-          if(div==null){
-            console.warn("div==null??",x,y);
-            continue;
+        for (let x = 0; x < 8; x++) {
+          for (let y = 0; y < 8; y++) {
+            try {
+              document
+                .getElementById(x + "-" + y)
+                .getElementsByClassName("bg")[0]
+                .setAttribute("onclick", "");
+            } catch (e) {}
           }
-          let piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1]
-          if(piece==null){ //not every div has a piece
-            continue;
-          }
-          piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1].outerHTML
-          pieces[x][y]=piece
         }
+
+        highlighting = []; //unhighlights them
+        // last_clicked_piece == current piece / piece to move
+        //(x,y) == place to move it to
+        let piece = last_clicked_piece.piece;
+        let piecetype = last_clicked_piece.ptype;
+
+        let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`;
+        document.getElementById(x + "-" + y).innerHTML += toinsert;
+        let div = document.getElementById(
+          last_clicked_piece.x + "-" + last_clicked_piece.y
+        );
+        div.innerHTML = div.innerHTML.replace(last_clicked_piece["html"], "");
+
+        let pieces = [];
+
+        for (let x = 0; x < 8; x++) {
+          pieces[x] = [];
+          for (let y = 0; y < 8; y++) {
+            let div = document.getElementById(x + "-" + y);
+            if (div == null) {
+              console.warn("div==null??", x, y);
+              continue;
+            }
+            let piece =
+              div.getElementsByClassName("piece")[
+                div.getElementsByClassName("piece").length - 1
+              ];
+            if (piece == null) {
+              //not every div has a piece
+              continue;
+            }
+            piece =
+              div.getElementsByClassName("piece")[
+                div.getElementsByClassName("piece").length - 1
+              ].outerHTML;
+            pieces[x][y] = piece;
+          }
+        }
+
+        socket.send("update-board" + JSON.stringify(pieces)); //I know this is a huge security risk
+
+        console.log("clicked bg at " + x + "," + y);
       }
 
-      socket.send("update-board"+JSON.stringify(pieces)) //I know this is a huge security risk
-
-      console.log("clicked bg at " + x + "," + y);
-    }
-
-    function highlight_background(x,y) {
-
-      let div = document.getElementById(x+"-"+y)
-      if(div == null)return
-      let bg = div.getElementsByClassName("bg")
-      if(bg == null)return
-      bg = bg[0]
-      if(bg.src!="https://infiniteonline.ga/images/Boards/green.png"){
-        bg.setAttribute('onclick',`clicked_bg(${x},${y})`)
-        bg.src="https://infiniteonline.ga/images/Boards/green.png"
-      } else {
-        bg.setAttribute('onclick',"")
-        if(grid[x][y]["isdark"]) {
-          bg.src = "/images/Boards/gray.png"
+      function highlight_background(x, y) {
+        let div = document.getElementById(x + "-" + y);
+        if (div == null) return;
+        let bg = div.getElementsByClassName("bg");
+        if (bg == null) return;
+        bg = bg[0];
+        if (bg.src != "https://infiniteonline.ga/images/Boards/green.png") {
+          bg.setAttribute("onclick", `clicked_bg(${x},${y})`);
+          bg.src = "https://infiniteonline.ga/images/Boards/green.png";
         } else {
-          bg.src = "/images/Boards/white.png"
+          bg.setAttribute("onclick", "");
+          if (grid[x][y]["isdark"]) {
+            bg.src = "/images/Boards/gray.png";
+          } else {
+            bg.src = "/images/Boards/white.png";
+          }
         }
       }
-    }
 
-    function highlight(x,y){
-      highlighting[highlighting.length]={
-        ["x"]:x,
-        ["y"]:y
+      function highlight(x, y) {
+        highlighting[highlighting.length] = {
+          ["x"]: x,
+          ["y"]: y,
+        };
+        highlight_background(x, y);
       }
-      highlight_background(x,y)
-    }
 
-    function haspiece(x,y) {
-      let div = document.getElementById(x+"-"+y)
-      if(div==null)return false
-      return div.getElementsByClassName("piece")[0]!=null
-    }
+      function haspiece(x, y) {
+        let div = document.getElementById(x + "-" + y);
+        if (div == null) return false;
+        return div.getElementsByClassName("piece")[0] != null;
+      }
 
-    function clicked_piece(x,y,ptype,piece) {
-      for (let i = 0; i < highlighting.length; i++) {
-        highlight_background(highlighting[i]["x"],highlighting[i]["y"])
-      }
-      highlighting = []
-      let div = document.getElementById(x+"-"+y)
-      // TODO: when piece that can be "killed" is clicked, remove it and move piece to there
-      let pie = div.getElementsByClassName("piece")[0]
-      if(last_clicked_piece["x"]==x && last_clicked_piece["y"]==y){
-        console.log("last_clicked_piece: ",last_clicked_piece)
-        last_clicked_piece={}
-        return
-      }
-      last_clicked_piece = {
-        ["html"]: pie.outerHTML,
-        ["x"]: x,
-        ["y"]: y,
-        ["piece"]: piece,
-        ["ptype"]: ptype
-      }
-      console.log(ptype+" "+piece+" at "+x+" "+y);
-      if(piece=="Pawn"){
-        if(ptype=="white"){
-          if(!haspiece(x,y-1))highlight(x,y-1)
-          if(haspiece(x+1,y-1))highlight(x+1,y-1)
-          if(haspiece(x-1,y-1))highlight(x-1,y-1)
+      function clicked_piece(x, y, ptype, piece) {
+        for (let i = 0; i < highlighting.length; i++) {
+          highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
+        }
+        highlighting = [];
+        let div = document.getElementById(x + "-" + y);
+        // TODO: when piece that can be "killed" is clicked, remove it and move piece to there
+        let pie = div.getElementsByClassName("piece")[0];
+        if (last_clicked_piece["x"] == x && last_clicked_piece["y"] == y) {
+          console.log("last_clicked_piece: ", last_clicked_piece);
+          last_clicked_piece = {};
+          return;
+        }
+        last_clicked_piece = {
+          ["html"]: pie.outerHTML,
+          ["x"]: x,
+          ["y"]: y,
+          ["piece"]: piece,
+          ["ptype"]: ptype,
+        };
+        console.log(ptype + " " + piece + " at " + x + " " + y);
+        if (piece == "Pawn") {
+          if (ptype == "white") {
+            if (!haspiece(x, y - 1)) highlight(x, y - 1);
+            if (haspiece(x + 1, y - 1)) highlight(x + 1, y - 1);
+            if (haspiece(x - 1, y - 1)) highlight(x - 1, y - 1);
+          } else {
+            if (!haspiece(x, y + 1)) highlight(x, y + 1);
+            if (haspiece(x + 1, y + 1)) highlight(x + 1, y + 1);
+            if (haspiece(x - 1, y + 1)) highlight(x - 1, y + 1);
+          }
+        }
+        /*
+        let moves = {
+          ["King"]: [
+            [x + 1, y + 1],
+            [x - 1, y - 1],
+            [x + 1, y - 1],
+            [x - 1, y + 1],
+            [x + 1, y],
+            [x, y + 1],
+            [x - 1, y],
+            [x, y - 1],
+          ],
+        };
+        if (moves[piece] != null) {
+          for (var i = 0; i < moves[piece].length; i++) {
+            highlight(moves[piece][i][0], moves[piece][i][1]);
+          }
+          console.log("used moves array");
+          return;
+        }
+        */
+        console.warn("didn't use moves array");
+        if (piece == "King") {
+          let targeted_piece;
+
+          targeted_piece = get_piece(x + 1, y + 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x + 1, y + 1);
+            }
+          }
+          if (!haspiece(x + 1, y + 1)) highlight(x + 1, y + 1);
+
+          targeted_piece = get_piece(x - 1, y - 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x - 1, y - 1);
+            }
+          }
+          if (!haspiece(x - 1, y - 1)) highlight(x - 1, y - 1);
+
+          targeted_piece = get_piece(x + 1, y - 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x + 1, y - 1);
+            }
+          }
+          if (!haspiece(x + 1, y - 1)) highlight(x + 1, y - 1);
+
+          targeted_piece = get_piece(x - 1, y + 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x - 1, y + 1);
+            }
+          }
+          if (!haspiece(x - 1, y + 1)) highlight(x - 1, y + 1);
+
+          targeted_piece = get_piece(x + 1, y);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x + 1, y);
+            }
+          }
+          if (!haspiece(x + 1, y)) highlight(x + 1, y);
+
+          targeted_piece = get_piece(x, y + 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x, y + 1);
+            }
+          }
+          if (!haspiece(x, y + 1)) highlight(x, y + 1);
+
+          targeted_piece = get_piece(x - 1, y);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x - 1, y);
+            }
+          }
+          if (!haspiece(x - 1, y)) highlight(x - 1, y);
+
+          targeted_piece = get_piece(x, y - 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            ) {
+              highlight(x, y - 1);
+            }
+          }
+          if (!haspiece(x, y - 1)) highlight(x, y - 1);
+         
+        }
+        if (piece == "Knight") {
+          let targeted_piece;
+
+          targeted_piece = get_piece(x + 2, y + 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x + 2, y + 1);
+          }
+          if (!haspiece(x + 2, y + 1)) highlight(x + 2, y + 1);
+
+          targeted_piece = get_piece(x + 2, y - 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x + 2, y - 1);
+          }
+          if (!haspiece(x + 2, y - 1)) highlight(x + 2, y - 1);
+
+          targeted_piece = get_piece(x - 2, y + 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x - 2, y + 1);
+          }
+          if (!haspiece(x - 2, y + 1)) highlight(x - 2, y + 1);
+
+          targeted_piece = get_piece(x - 2, y - 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x - 2, y - 1);
+          }
+          if (!haspiece(x - 2, y - 1)) highlight(x - 2, y - 1);
+
+          targeted_piece = get_piece(x + 1, y - 2);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x + 1, y - 2);
+          }
+          if (!haspiece(x + 1, y - 2)) highlight(x + 1, y - 2);
+
+          targeted_piece = get_piece(x + 1, y + 2);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x + 1, y + 2);
+          }
+          if (!haspiece(x + 1, y + 2)) highlight(x + 1, y + 2);
+
+          targeted_piece = get_piece(x - 1, y + 2);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x - 1, y + 2);
+          }
+          if (!haspiece(x - 1, y + 2)) highlight(x - 1, y + 2);
+
+          targeted_piece = get_piece(x - 1, y - 1);
+          if (targeted_piece != null) {
+            if (
+              (targeted_piece.src.search("dark") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("white") == -1) ||
+              (targeted_piece.src.search("white") == -1 &&
+                document
+                  .getElementById(x + "-" + y)
+                  .getElementsByClassName("piece")[0]
+                  .src.search("dark") == -1)
+            )
+              highlight(x - 1, y - 2);
+          }
+          if (!haspiece(x - 1, y - 2)) highlight(x - 1, y - 2);
+        }
+
+        if (piece == "Rook" || piece == "Queen") {
+          let targeted_piece;
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x - i, y);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x - i, y);
+              }
+            }
+            if (haspiece(x - i, y)) {
+              i = 9;
+            } else {
+              highlight(x - i, y);
+            }
+          }
+
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x + i, y);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x + i, y);
+              }
+            }
+            if (haspiece(x + i, y)) {
+              i = 9;
+            } else {
+              highlight(x + i, y);
+            }
+          }
+
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x, y - i);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x, y - i);
+              }
+            }
+            if (haspiece(x, y - i)) {
+              i = 9;
+            } else {
+              highlight(x, y - i);
+            }
+          }
+
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x, y + i);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x, y + i);
+              }
+            }
+            if (haspiece(x, y + i)) {
+              i = 9;
+            } else {
+              highlight(x, y + i);
+            }
+          }
+        }
+
+        if (piece == "Bishop" || piece == "Queen") {
+          let targeted_piece;
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x - i, y - i);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x - i, y - i);
+              }
+            }
+            if (haspiece(x - i, y - i)) {
+              i = 9;
+            } else {
+              highlight(x - i, y - i);
+            }
+          }
+
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x + i, y - i);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x + i, y - i);
+              }
+            }
+            if (haspiece(x + i, y - i)) {
+              i = 9;
+            } else {
+              highlight(x + i, y - i);
+            }
+          }
+
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x - i, y + i);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x - i, y + i);
+              }
+            }
+            if (haspiece(x - i, y + i)) {
+              i = 9;
+            } else {
+              highlight(x - i, y + i);
+            }
+          }
+
+          for (let i = 1; i <= 7; i++) {
+            targeted_piece = get_piece(x + i, y + i);
+            if (targeted_piece != null) {
+              if (
+                (targeted_piece.src.search("dark") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("white") == -1) ||
+                (targeted_piece.src.search("white") == -1 &&
+                  document
+                    .getElementById(x + "-" + y)
+                    .getElementsByClassName("piece")[0]
+                    .src.search("dark") == -1)
+              ) {
+                highlight(x + i, y + i);
+              }
+            }
+            if (haspiece(x + i, y + i)) {
+              i = 9;
+            } else {
+              highlight(x + i, y + i);
+            }
+          }
+        }
+      } //end piece move
+
+      let boardsize = 296;
+      const c_w = window.innerWidth;
+      const c_h = window.innerHeight;
+      var showed_text = false;
+      var old = "";
+      function checksize() {
+        let w = window.innerWidth;
+        let h = window.innerHeight;
+        if (c_w != w || c_h != h) {
+          if (!showed_text) {
+            console.warn(
+              "please do not change your window size for optimal game experience"
+            ); //changed for better experience lol
+          }
+          showed_text = true;
+        }
+        if (w < 500 || h < 500) {
+          if (old == "") old = document.body.innerHTML;
+          document.body.innerHTML = `<h1 style="color:red;">Your screen size is too small to show the chess board, please adjust the window size</h1>`;
         } else {
-          if(!haspiece(x,y+1))highlight(x,y+1)
-          if(haspiece(x+1,y+1))highlight(x+1,y+1)
-          if(haspiece(x-1,y+1))highlight(x-1,y+1)
-        }
-      }
-      let moves = {
-        ["King"]: [
-          [x+1,y+1],
-          [x-1,y-1],
-          [x+1,y-1],
-          [x-1,y+1],
-          [x+1,y],
-          [x,y+1],
-          [x-1,y],
-          [x,y-1],
-        ]
-      }
-      if(moves[piece]!=null){
-        for (var i = 0; i < moves[piece].length; i++) {
-          highlight(moves[piece][i][0],moves[piece][i][1])
-        }
-        console.log("used moves array");
-        return
-      }
-      console.warn("didn't use moves array");
-      if(piece=="King") {
-        highlight(x+1,y+1)
-        highlight(x-1,y-1)
-
-        highlight(x+1,y-1)
-        highlight(x-1,y+1)
-
-        highlight(x+1,y)
-        highlight(x,y+1)
-
-        highlight(x-1,y)
-        highlight(x,y-1)
-
-      }
-      if(piece=="Knight") {
-        highlight(x+2,y+1)
-        highlight(x+2,y-1)
-
-        highlight(x-2,y+1)
-        highlight(x-2,y-1)
-
-        highlight(x+1,y-2)
-        highlight(x+1,y+2)
-
-        highlight(x-1,y+2)
-        highlight(x-1,y-2)
-      }
-
-      if(piece=="Rook" || piece=="Queen"){
-          for(let i = 1;i<=8;i++){
-            highlight(x-i,y)
-            highlight(x+i,y)
-            highlight(x,y-i)
-            highlight(x,y+i)
+          if (old != "") {
+            document.body.innerHTML = old;
+            old = "";
           }
-      }
-
-      if(piece=="Bishop" || piece=="Queen"){
-        for(let i = 1;i<=8;i++){
-            highlight(x+i,y+i)
-            highlight(x+i,y-i)
-            highlight(x-i,y+i)
-            highlight(x-i,y-i)
-          }
-      }
-
-
-    } //end piece move
-
-    let boardsize = 296
-    const c_w = window.innerWidth;
-    const c_h = window.innerHeight;
-    var showed_text = false
-    var old = ""
-    function checksize() {
-      let w = window.innerWidth;
-      let h = window.innerHeight;
-      if(c_w != w || c_h != h){
-        if(!showed_text){
-          console.warn("please do not change your window size for optimal game experience") //changed for better experience lol
         }
-        showed_text = true
+        setTimeout(checksize, 100);
       }
-      if(w<500 || h<500){
-        if(old == "")old = document.body.innerHTML
-        document.body.innerHTML=`<h1 style="color:red;">Your screen size is too small to show the chess board, please adjust the window size</h1>`
-      } else {
-        if(old != "") {
-          document.body.innerHTML=old
-          old = ""
-        }
-      }
-      setTimeout(checksize,100)
-    }
 
-    checksize()
+      checksize();
 
-    function createws(){
-      socket = new WebSocket('wss://ftp.infiniteonline.ga:3001');
-      socket.addEventListener('open', function (event) {
-        console.log("opened a connection to the game server!");
+      function createws() {
+        socket = new WebSocket("wss://ftp.infiniteonline.ga:3001");
+        socket.addEventListener("open", function (event) {
+          console.log("opened a connection to the game server!");
           // TODO: verify to the server with the acc
-      });
-      socket.addEventListener('message', function (event) {
-        let data = event.data
-        let current_pieces = []
-        for (let x = 0; x < 8; x++) {
-          current_pieces[x]=[]
-          for (let y = 0; y < 8; y++) {
-            let div = document.getElementById(x+"-"+y)
-            if(div==null){
-              console.warn("div==null??",x,y);
-              continue;
+        });
+        socket.addEventListener("message", function (event) {
+          let data = event.data;
+          let current_pieces = [];
+          for (let x = 0; x < 8; x++) {
+            current_pieces[x] = [];
+            for (let y = 0; y < 8; y++) {
+              let div = document.getElementById(x + "-" + y);
+              if (div == null) {
+                console.warn("div==null??", x, y);
+                continue;
+              }
+              let piece =
+                div.getElementsByClassName("piece")[
+                  div.getElementsByClassName("piece").length - 1
+                ];
+              if (piece == null) {
+                console.warn("piece==null", x, y);
+                continue;
+              }
+              piece =
+                div.getElementsByClassName("piece")[
+                  div.getElementsByClassName("piece").length - 1
+                ].outerHTML;
+              current_pieces[x][y] = piece;
             }
-            let piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1]
-            if(piece==null){
-              console.warn("piece==null",x,y);
-              continue;
-            }
-            piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1].outerHTML
-            current_pieces[x][y]=piece
           }
-        }
-        if(chess_debug){
-          console.log("event data",data);
-        }
-        let new_pieces = JSON.parse(data)
-        if(current_pieces.equals(new_pieces))return "already up to date"
-        for (let x = 0; x < 8; x++) {
-          for (let y = 0; y < 8; y++) {
-            if(new_pieces[x][y]==current_pieces[x][y])continue;
-            if(new_pieces[x][y]==null)new_pieces[x][y]=""
-            if(new_pieces[x][y]=="null")new_pieces[x][y]=""
-            if(new_pieces[x][y]=="undefined")new_pieces[x][y]=""
-            let div = document.getElementById(x+"-"+y)
-            if(div==null){
-              console.warn("div==null??",x,y);
-              continue;
-            }
-            let bg = div.getElementsByClassName("bg")[0]
-            if(bg==null){
-              console.warn("bg==null",x,y);
-              continue;
-            }
-            bg = bg.outerHTML
-            div.innerHTML = (bg + new_pieces[x][y]).replace(/\"null\"/,"").replace(/\"undefined\"/,"")
+          if (chess_debug) {
+            console.log("event data", data);
           }
-        }
-      });
-    }
-    var grid = {}
-    var doc = document.getElementById("maindiv");
-    for (let x = 0; x < 8; x++) {
-      grid[x] = grid[x] || {}
-      for (let y = 0; y < 8; y++) {
-        grid[x][y] = grid[x][y] || {}
-        let isDark = (x+y)%2==1
-        grid[x][y]["isdark"]=isDark
-        if(isDark){
-          grid[x][y]["dom"]=`<img src="/images/Boards/gray.png"  class="bg" width=${boardsize/8} height=${boardsize/8} draggable="false">`
-        } else {
-          grid[x][y]["dom"]=`<img src="/images/Boards/white.png" class="bg" width=${boardsize/8} height=${boardsize/8} draggable="false">`
-        }
+          let new_pieces = JSON.parse(data);
+          if (current_pieces.equals(new_pieces)) return "already up to date";
+          for (let x = 0; x < 8; x++) {
+            for (let y = 0; y < 8; y++) {
+              if (new_pieces[x][y] == current_pieces[x][y]) continue;
+              if (new_pieces[x][y] == null) new_pieces[x][y] = "";
+              if (new_pieces[x][y] == "null") new_pieces[x][y] = "";
+              if (new_pieces[x][y] == "undefined") new_pieces[x][y] = "";
+              let div = document.getElementById(x + "-" + y);
+              if (div == null) {
+                console.warn("div==null??", x, y);
+                continue;
+              }
+              let bg = div.getElementsByClassName("bg")[0];
+              if (bg == null) {
+                console.warn("bg==null", x, y);
+                continue;
+              }
+              bg = bg.outerHTML;
+              div.innerHTML = (bg + new_pieces[x][y])
+                .replace(/\"null\"/, "")
+                .replace(/\"undefined\"/, "");
+            }
+          }
+        });
       }
-    }
-    console.log("created 2d grid")
-
-    for (let y = 0; y < 8; y++) {
-      doc.innerHTML += "<br>"
+      var grid = {};
+      var doc = document.getElementById("maindiv");
       for (let x = 0; x < 8; x++) {
-        let toinsert = `<div class="board absolute" id='${x}-${y}' style="left:${c_w/2-boardsize+x*(boardsize/8)}px;top:${c_h/2-boardsize+y*(boardsize/8)}px">`
-        let piece = "dummy"
-
-        if(y==1 || y==6)piece="Pawn"
-        if(y==0 || y==7) {
-          switch (x) {
-            case 0:
-            case 7:
-              piece="Rook"
-              break;
-            case 1:
-            case 6:
-              piece="Knight"
-              break;
-            case 2:
-            case 5:
-              piece="Bishop"
-              break;
-            case 3:
-              piece="Queen"
-              break
-            case 4:
-              piece="King"
-              break
+        grid[x] = grid[x] || {};
+        for (let y = 0; y < 8; y++) {
+          grid[x][y] = grid[x][y] || {};
+          let isDark = (x + y) % 2 == 1;
+          grid[x][y]["isdark"] = isDark;
+          if (isDark) {
+            grid[x][y][
+              "dom"
+            ] = `<img src="/images/Boards/gray.png"  class="bg" width=${
+              boardsize / 8
+            } height=${boardsize / 8} draggable="false">`;
+          } else {
+            grid[x][y][
+              "dom"
+            ] = `<img src="/images/Boards/white.png" class="bg" width=${
+              boardsize / 8
+            } height=${boardsize / 8} draggable="false">`;
           }
         }
-
-
-        if(piece!="dummy") {
-          let ptype = "white"
-          if(y<6)ptype="dark"
-          toinsert += `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`
-        }
-        toinsert += grid[x][y]['dom']
-        toinsert += "</div>"
-        doc.innerHTML += toinsert
       }
-    }
-    console.log("showing 2d grid")
+      console.log("created 2d grid");
 
-    createws()
+      for (let y = 0; y < 8; y++) {
+        doc.innerHTML += "<br>";
+        for (let x = 0; x < 8; x++) {
+          let toinsert = `<div class="board absolute" id='${x}-${y}' style="left:${
+            c_w / 2 - boardsize + x * (boardsize / 8)
+          }px;top:${c_h / 2 - boardsize + y * (boardsize / 8)}px">`;
+          let piece = "dummy";
 
-    console.log("trying to connect with game server")
+          if (y == 1 || y == 6) piece = "Pawn";
+          if (y == 0 || y == 7) {
+            switch (x) {
+              case 0:
+              case 7:
+                piece = "Rook";
+                break;
+              case 1:
+              case 6:
+                piece = "Knight";
+                break;
+              case 2:
+              case 5:
+                piece = "Bishop";
+                break;
+              case 3:
+                piece = "Queen";
+                break;
+              case 4:
+                piece = "King";
+                break;
+            }
+          }
+
+          if (piece != "dummy") {
+            let ptype = "white";
+            if (y < 6) ptype = "dark";
+            toinsert += `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`;
+          }
+          toinsert += grid[x][y]["dom"];
+          toinsert += "</div>";
+          doc.innerHTML += toinsert;
+        }
+      }
+      console.log("showing 2d grid");
+
+      createws();
+
+      console.log("trying to connect with game server");
+
+      function get_piece(x, y) {
+        let div = document.getElementById(x + "-" + y);
+        if (div == null) return;
+        let piece = div.getElementsByClassName("piece")[0];
+        return piece;
+      }
     </script>
   </body>
 </html>
