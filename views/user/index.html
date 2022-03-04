@@ -285,14 +285,6 @@
       });
       socket.addEventListener('message', function (event) {
         let data = event.data
-        // data = data.replace(/\"/g,"\\\"")
-        // data = `["${data}"]`
-        // for (var i = 0; i < 8; i++) {
-        //   data = data.replace(/\,\,/g,",null,")
-        // }
-        // data = data.replace(/\>\,\</,'\>\","\<')
-        console.log("received new info about the game!",data);
-
         let current_pieces = []
         for (let x = 0; x < 8; x++) {
           current_pieces[x]=[]
@@ -302,9 +294,6 @@
               console.warn("div==null??",x,y);
               continue;
             }
-            console.log("pieces",div.getElementsByClassName("piece"))
-            console.log("pieceslength",div.getElementsByClassName("piece").length-1)
-            console.log("piece",div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1])
             let piece = div.getElementsByClassName("piece")[div.getElementsByClassName("piece").length-1]
             if(piece==null){
               console.warn("piece==null",x,y);
