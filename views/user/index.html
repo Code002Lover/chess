@@ -163,12 +163,11 @@
         let div = document.getElementById(x + "-" + y);
         let bg = div.getElementsByClassName("bg")[0]
         if(bg != null) {
-          if(bg.src.search("green")) {
+          if(bg.src.search("green")!=-1) {
               clicked_bg(x,y)
               return
           }
         }
-        // TODO: when piece that can be "killed" is clicked, remove it and move piece to there
         let pie = div.getElementsByClassName("piece")[0];
         if (last_clicked_piece["x"] == x && last_clicked_piece["y"] == y) {
           console.log("last_clicked_piece: ", last_clicked_piece);
