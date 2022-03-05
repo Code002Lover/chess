@@ -161,6 +161,13 @@
         }
         highlighting = [];
         let div = document.getElementById(x + "-" + y);
+        let bg = div.getElementsByClassName("bg")[0]
+        if(bg != null) {
+          if(bg.src.search("green")) {
+              clicked_bg(x,y)
+              return
+          }
+        }
         // TODO: when piece that can be "killed" is clicked, remove it and move piece to there
         let pie = div.getElementsByClassName("piece")[0];
         if (last_clicked_piece["x"] == x && last_clicked_piece["y"] == y) {
@@ -550,7 +557,7 @@
           if (!showed_text) {
             console.warn(
               "please do not change your window size for optimal game experience"
-            ); //changed for better experience lol
+            );
           }
           showed_text = true;
         }
@@ -697,10 +704,10 @@
         }
       }
       console.log("showing 2d grid");
+      console.log("trying to connect with game server");
 
       createws();
 
-      console.log("trying to connect with game server");
 
       function get_piece(x, y) {
         let div = document.getElementById(x + "-" + y);
