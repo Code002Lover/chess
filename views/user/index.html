@@ -243,28 +243,6 @@
             }
           }
         }
-        /*
-        let moves = {
-          ["King"]: [
-            [x + 1, y + 1],
-            [x - 1, y - 1],
-            [x + 1, y - 1],
-            [x - 1, y + 1],
-            [x + 1, y],
-            [x, y + 1],
-            [x - 1, y],
-            [x, y - 1],
-          ],
-        };
-        if (moves[piece] != null) {
-          for (var i = 0; i < moves[piece].length; i++) {
-            highlight(moves[piece][i][0], moves[piece][i][1]);
-          }
-          console.log("used moves array");
-          return;
-        }
-        */
-        console.warn("didn't use moves array");
         if (piece == "King") {
           let targeted_piece;
 
@@ -272,15 +250,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x + 1, y + 1);
             }
@@ -291,15 +263,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x - 1, y - 1);
             }
@@ -310,15 +276,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x + 1, y - 1);
             }
@@ -329,15 +289,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x - 1, y + 1);
             }
@@ -348,15 +302,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x + 1, y);
             }
@@ -367,15 +315,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x, y + 1);
             }
@@ -386,15 +328,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x - 1, y);
             }
@@ -405,15 +341,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             ) {
               highlight(x, y - 1);
             }
@@ -427,15 +357,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x + 2, y + 1);
           }
@@ -445,15 +369,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x + 2, y - 1);
           }
@@ -463,15 +381,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x - 2, y + 1);
           }
@@ -481,15 +393,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x - 2, y - 1);
           }
@@ -499,15 +405,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x + 1, y - 2);
           }
@@ -517,15 +417,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x + 1, y + 2);
           }
@@ -535,15 +429,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x - 1, y + 2);
           }
@@ -553,15 +441,9 @@
           if (targeted_piece != null) {
             if (
               (targeted_piece.src.search("dark") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("white") == -1) ||
+                get_piece(x,y).src.search("white") == -1) ||
               (targeted_piece.src.search("white") == -1 &&
-                document
-                  .getElementById(x + "-" + y)
-                  .getElementsByClassName("piece")[0]
-                  .src.search("dark") == -1)
+                get_piece(x,y).src.search("dark") == -1)
             )
               highlight(x - 1, y - 2);
           }
@@ -575,15 +457,9 @@
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x - i, y);
               }
@@ -600,15 +476,9 @@
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x + i, y);
               }
@@ -625,15 +495,9 @@
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x, y - i);
               }
@@ -650,15 +514,9 @@
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x, y + i);
               }
@@ -678,15 +536,9 @@
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x - i, y - i);
               }
@@ -703,15 +555,9 @@
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x + i, y - i);
               }
@@ -725,18 +571,13 @@
 
           for (let i = 1; i <= 7; i++) {
             targeted_piece = get_piece(x - i, y + i);
+            //arePiecesSameColor(p1,p2)
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x - i, y + i);
               }
@@ -753,15 +594,9 @@
             if (targeted_piece != null) {
               if (
                 (targeted_piece.src.search("dark") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("white") == -1) ||
+                  get_piece(x,y).src.search("white") == -1) ||
                 (targeted_piece.src.search("white") == -1 &&
-                  document
-                    .getElementById(x + "-" + y)
-                    .getElementsByClassName("piece")[0]
-                    .src.search("dark") == -1)
+                  get_piece(x,y).src.search("dark") == -1)
               ) {
                 highlight(x + i, y + i);
               }
@@ -944,6 +779,10 @@
         if (div == null) return;
         let piece = div.getElementsByClassName("piece")[0];
         return piece;
+      }
+
+      function arePiecesSameColor(p1,p2){
+        return (p1.src.search("dark") == -1 && p2.src.search("white") == -1)  || (p1.src.search("white") == -1 && p2.src.search("dark") == -1)
       }
     </script>
   </body>
