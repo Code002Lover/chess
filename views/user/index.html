@@ -165,18 +165,20 @@
       }
 
       function clicked_piece(x, y, ptype, piece) {
-        for (let i = 0; i < highlighting.length; i++) {
-          highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
-        }
-        highlighting = [];
         let div = document.getElementById(x + "-" + y);
         let bg = div.getElementsByClassName("bg")[0]
         if(bg != null) {
           if(ishighlighted(x,y)){
               clicked_bg(x,y)
               return
+          } else {
+            console.log(`bg at ${x},${y} is not highlighted`)
           }
         }
+        for (let i = 0; i < highlighting.length; i++) {
+          highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
+        }
+        highlighting = [];
         let pie = div.getElementsByClassName("piece")[0];
         if (last_clicked_piece["x"] == x && last_clicked_piece["y"] == y) {
           console.log("last_clicked_piece: ", last_clicked_piece);
