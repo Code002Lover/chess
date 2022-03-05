@@ -25,14 +25,14 @@ body {
 }
 
 .bg {
-  /* pointer-events: none; */
+  user-select: none;
 }
 
-.piece{
-  filter:brightness(100%);
+.piece {
+  filter: brightness(100%);
 }
 
-.piece:hover{
- filter: brightness(50%);
- transition: all 0.5s ease;
+.piece:hover {
+  filter: brightness(50%);
+  transition: all 0.5s ease;
 }
