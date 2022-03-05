@@ -249,10 +249,7 @@
           targeted_piece = get_piece(x + 1, y + 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x + 1, y + 1);
             }
@@ -262,10 +259,7 @@
           targeted_piece = get_piece(x - 1, y - 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x - 1, y - 1);
             }
@@ -275,10 +269,7 @@
           targeted_piece = get_piece(x + 1, y - 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x + 1, y - 1);
             }
@@ -288,10 +279,7 @@
           targeted_piece = get_piece(x - 1, y + 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x - 1, y + 1);
             }
@@ -301,10 +289,7 @@
           targeted_piece = get_piece(x + 1, y);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x + 1, y);
             }
@@ -314,10 +299,7 @@
           targeted_piece = get_piece(x, y + 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x, y + 1);
             }
@@ -327,10 +309,7 @@
           targeted_piece = get_piece(x - 1, y);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x - 1, y);
             }
@@ -340,10 +319,7 @@
           targeted_piece = get_piece(x, y - 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             ) {
               highlight(x, y - 1);
             }
@@ -356,10 +332,7 @@
           targeted_piece = get_piece(x + 2, y + 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x + 2, y + 1);
           }
@@ -368,10 +341,7 @@
           targeted_piece = get_piece(x + 2, y - 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x + 2, y - 1);
           }
@@ -380,10 +350,7 @@
           targeted_piece = get_piece(x - 2, y + 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x - 2, y + 1);
           }
@@ -392,10 +359,7 @@
           targeted_piece = get_piece(x - 2, y - 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x - 2, y - 1);
           }
@@ -404,10 +368,7 @@
           targeted_piece = get_piece(x + 1, y - 2);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x + 1, y - 2);
           }
@@ -416,10 +377,7 @@
           targeted_piece = get_piece(x + 1, y + 2);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x + 1, y + 2);
           }
@@ -428,10 +386,7 @@
           targeted_piece = get_piece(x - 1, y + 2);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x - 1, y + 2);
           }
@@ -440,10 +395,7 @@
           targeted_piece = get_piece(x - 1, y - 1);
           if (targeted_piece != null) {
             if (
-              (targeted_piece.src.search("dark") == -1 &&
-                get_piece(x,y).src.search("white") == -1) ||
-              (targeted_piece.src.search("white") == -1 &&
-                get_piece(x,y).src.search("dark") == -1)
+              arePiecesSameColor(targeted_piece,get_piece(x,y))
             )
               highlight(x - 1, y - 2);
           }
@@ -456,10 +408,7 @@
             targeted_piece = get_piece(x - i, y);
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x - i, y);
               }
@@ -475,10 +424,7 @@
             targeted_piece = get_piece(x + i, y);
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x + i, y);
               }
@@ -494,10 +440,7 @@
             targeted_piece = get_piece(x, y - i);
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x, y - i);
               }
@@ -513,10 +456,7 @@
             targeted_piece = get_piece(x, y + i);
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x, y + i);
               }
@@ -535,10 +475,7 @@
             targeted_piece = get_piece(x - i, y - i);
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x - i, y - i);
               }
@@ -554,10 +491,7 @@
             targeted_piece = get_piece(x + i, y - i);
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x + i, y - i);
               }
@@ -574,10 +508,7 @@
             //arePiecesSameColor(p1,p2)
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x - i, y + i);
               }
@@ -593,10 +524,7 @@
             targeted_piece = get_piece(x + i, y + i);
             if (targeted_piece != null) {
               if (
-                (targeted_piece.src.search("dark") == -1 &&
-                  get_piece(x,y).src.search("white") == -1) ||
-                (targeted_piece.src.search("white") == -1 &&
-                  get_piece(x,y).src.search("dark") == -1)
+                arePiecesSameColor(targeted_piece,get_piece(x,y))
               ) {
                 highlight(x + i, y + i);
               }
