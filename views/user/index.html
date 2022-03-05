@@ -141,6 +141,15 @@
         }
       }
 
+      function ishighlighted(x,y){
+        for (var i = 0; i < highlighting.length; i++) {
+          if(highlighting[i]["x"]==x && highlighting[i]["y"]==y){
+            return true
+          }
+        }
+        return false
+      }
+
       function highlight(x, y) {
         highlighting[highlighting.length] = {
           ["x"]: x,
@@ -163,7 +172,7 @@
         let div = document.getElementById(x + "-" + y);
         let bg = div.getElementsByClassName("bg")[0]
         if(bg != null) {
-          if(bg.src.search("green")!=-1) {
+          if(ishighlighted(x,y)){
               clicked_bg(x,y)
               return
           }
