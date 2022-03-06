@@ -665,8 +665,8 @@
         doc.innerHTML += "<br>";
         for (let x = 0; x < 8; x++) {
           let toinsert = `<div class="board absolute" id='${x}-${y}' style="left:${
-            c_w/2+x * boardsize / 8
-          }px;top:${c_h/2+y * boardsize / 8}px">`;
+            c_w/2-boardsize / 8+x * boardsize / 8
+          }px;top:${c_h/4-boardsize / 8+y * boardsize / 8}px">`;
           let piece = "dummy";
 
           if (y == 1 || y == 6) piece = "Pawn";
