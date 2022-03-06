@@ -336,90 +336,36 @@
         if (piece == "Knight") {
           let targeted_piece;
 
-          targeted_piece = get_piece(x + 2, y + 1);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x + 2, y + 1);
-          }
+          highlightDiffPiecesPos(x+2,y+1,x,y)
           if (!haspiece(x + 2, y + 1)) highlight(x + 2, y + 1);
 
-          targeted_piece = get_piece(x + 2, y - 1);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x + 2, y - 1);
-          }
+          highlightDiffPiecesPos(x+2,y-1,x,y)
           if (!haspiece(x + 2, y - 1)) highlight(x + 2, y - 1);
 
-          targeted_piece = get_piece(x - 2, y + 1);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x - 2, y + 1);
-          }
+          highlightDiffPiecesPos(x-2,y+1,x,y)
           if (!haspiece(x - 2, y + 1)) highlight(x - 2, y + 1);
 
-          targeted_piece = get_piece(x - 2, y - 1);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x - 2, y - 1);
-          }
+          highlightDiffPiecesPos(x-2,y-1,x,y)
           if (!haspiece(x - 2, y - 1)) highlight(x - 2, y - 1);
 
-          targeted_piece = get_piece(x + 1, y - 2);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x + 1, y - 2);
-          }
+          highlightDiffPiecesPos(x+1,y-2,x,y)
           if (!haspiece(x + 1, y - 2)) highlight(x + 1, y - 2);
 
-          targeted_piece = get_piece(x + 1, y + 2);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x + 1, y + 2);
-          }
+          highlightDiffPiecesPos(x+1,y+2,x,y)
+          //if (arePiecesSameColor(get_piece(x+1,y+2),get_piece(x,y)))highlight(x + 1, y + 2);
           if (!haspiece(x + 1, y + 2)) highlight(x + 1, y + 2);
 
-          targeted_piece = get_piece(x - 1, y + 2);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x - 1, y + 2);
-          }
+          highlightDiffPiecesPos(x-1,y+2,x,y)
           if (!haspiece(x - 1, y + 2)) highlight(x - 1, y + 2);
 
-          targeted_piece = get_piece(x - 1, y - 1);
-          if (targeted_piece != null) {
-            if (
-              arePiecesSameColor(targeted_piece,get_piece(x,y))
-            )
-              highlight(x - 1, y - 2);
-          }
+          highlightDiffPiecesPos(x-1,y-1,x,y)
           if (!haspiece(x - 1, y - 2)) highlight(x - 1, y - 2);
         }
 
         if (piece == "Rook" || piece == "Queen") {
           let targeted_piece;
           for (let i = 1; i <= 7; i++) {
-            targeted_piece = get_piece(x - i, y);
-            if (targeted_piece != null) {
-              if (
-                arePiecesSameColor(targeted_piece,get_piece(x,y))
-              ) {
-                highlight(x - i, y);
-              }
-            }
+            highlightDiffPiecesPos(x-i,y,x,y)
             if (haspiece(x - i, y)) {
               i = 9;
             } else {
@@ -428,14 +374,7 @@
           }
 
           for (let i = 1; i <= 7; i++) {
-            targeted_piece = get_piece(x + i, y);
-            if (targeted_piece != null) {
-              if (
-                arePiecesSameColor(targeted_piece,get_piece(x,y))
-              ) {
-                highlight(x + i, y);
-              }
-            }
+            highlightDiffPiecesPos(x+i,y,x,y)
             if (haspiece(x + i, y)) {
               i = 9;
             } else {
@@ -444,14 +383,7 @@
           }
 
           for (let i = 1; i <= 7; i++) {
-            targeted_piece = get_piece(x, y - i);
-            if (targeted_piece != null) {
-              if (
-                arePiecesSameColor(targeted_piece,get_piece(x,y))
-              ) {
-                highlight(x, y - i);
-              }
-            }
+            highlightDiffPiecesPos(x,y-i,x,y)
             if (haspiece(x, y - i)) {
               i = 9;
             } else {
@@ -460,14 +392,7 @@
           }
 
           for (let i = 1; i <= 7; i++) {
-            targeted_piece = get_piece(x, y + i);
-            if (targeted_piece != null) {
-              if (
-                arePiecesSameColor(targeted_piece,get_piece(x,y))
-              ) {
-                highlight(x, y + i);
-              }
-            }
+            highlightDiffPiecesPos(x,y+i,x,y)
             if (haspiece(x, y + i)) {
               i = 9;
             } else {
@@ -665,7 +590,7 @@
         doc.innerHTML += "<br>";
         for (let x = 0; x < 8; x++) {
           let toinsert = `<div class="board absolute" id='${x}-${y}' style="left:${
-            c_w/4-boardsize / 8+x * boardsize / 8
+            c_w/3-boardsize / 8+x * boardsize / 8
           }px;top:${c_h/4-boardsize / 8+y * boardsize / 8}px">`;
           let piece = "dummy";
 
@@ -717,7 +642,20 @@
       }
 
       function arePiecesSameColor(p1,p2){
-        return (p1.src.search("dark") == -1 && p2.src.search("white") == -1)  || (p1.src.search("white") == -1 && p2.src.search("dark") == -1)
+        if(p1==null)return false
+        if(p2==null)return false
+        try {
+          return (p1.src.search("dark") == -1 && p2.src.search("white") == -1)  || (p1.src.search("white") == -1 && p2.src.search("dark") == -1)
+        } catch {
+          return false
+        }
+        return false
+      }
+
+      function highlightDiffPiecesPos(x1,y1,x2,y2) {
+        if(arePiecesSameColor(get_piece(x1,y1),get_piece(x2,y2))) {
+          highlight(x1,y1);
+        }
       }
     </script>
   </body>
