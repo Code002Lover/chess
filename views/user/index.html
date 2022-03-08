@@ -59,7 +59,8 @@
 
       var last_clicked_piece = {};
 
-      function setTile(x,y,background,pi) {
+      function setTile(x,y,pi) {
+        let background = document.getElementById(`${x}-${y}`).getElementsByClassName("bg")[0]
         if(background==null)console.error("setTile bg error");
         if(background.outerHTML==null)console.error("setTile outerHTML error");
         if(pi == null)document.getElementById(x + "-" + y).innerHTML = background.outerHTML
@@ -103,7 +104,7 @@
         // } else {
         //   document.getElementById(x + "-" + y).innerHTML += toinsert;
         // }
-        setTile(x,y,document.getElementById(x + "-" + y).getElementsByClassName("bg")[0],last_clicked_piece)
+        setTile(x,y,last_clicked_piece)
         let div = document.getElementById(
           last_clicked_piece.x + "-" + last_clicked_piece.y
         );
@@ -521,15 +522,15 @@
                 break;
             }
           }
-
-          if (piece != "dummy") {
-            let ptype = "white";
-            if (y < 6) ptype = "dark";
-            toinsert += `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`;
-          }
           toinsert += grid[x][y]["dom"];
           toinsert += "</div>";
           doc.innerHTML += toinsert;
+          if (piece != "dummy") {
+            let ptype = "white";
+            if (y < 6) ptype = "dark";
+            setTile(x,y,{"ptype":ptype,"piece":piece})
+            // toinsert += `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`;
+          }
         }
       }
       console.log("showing 2d grid");
