@@ -15,6 +15,7 @@ body {
 
 .bg {
   user-select: none;
+  image-rendering: pixelated;
 }
 
 .piece {
