@@ -60,6 +60,8 @@
       var last_clicked_piece = {};
 
       function setTile(x,y,background,pi) {
+        if(background==null)console.error("setTile bg error");
+        if(background.outerHTML==null)console.error("setTile outerHTML error");
         if(pi == null)document.getElementById(x + "-" + y).innerHTML = background.outerHTML
         let piecetype = pi.ptype
         let piece = pi.piece
@@ -101,7 +103,7 @@
         // } else {
         //   document.getElementById(x + "-" + y).innerHTML += toinsert;
         // }
-        setTile(x,y,document.getElementById(x + "-" + y).getElementsByClassName("bg"),last_clicked_piece)
+        setTile(x,y,document.getElementById(x + "-" + y).getElementsByClassName("bg")[0],last_clicked_piece)
         let div = document.getElementById(
           last_clicked_piece.x + "-" + last_clicked_piece.y
         );
