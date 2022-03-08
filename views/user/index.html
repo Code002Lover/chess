@@ -529,7 +529,6 @@
             let ptype = "white";
             if (y < 6) ptype = "dark";
             setTile(x,y,{"ptype":ptype,"piece":piece})
-            // toinsert += `<img src="/images/pieces/${ptype}/${piece}.png" piece="${piece}" piecetype="${ptype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${ptype}','${piece}')">`;
           }
         }
       }
@@ -545,7 +544,7 @@
         return piece;
       }
 
-      function arePiecesSameColor(p1, p2) {
+      function arePiecesNotSameColor(p1, p2) {
         if (p1 == null) return false;
         if (p2 == null) return false;
         try {
@@ -560,7 +559,7 @@
       }
 
       function highlightDiffPiecesPos(x1, y1, x2, y2) {
-        if (arePiecesSameColor(get_piece(x1, y1), get_piece(x2, y2))) {
+        if (arePiecesNotSameColor(get_piece(x1, y1), get_piece(x2, y2))) {
           highlight(x1, y1);
         }
       }
