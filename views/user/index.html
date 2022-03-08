@@ -195,8 +195,12 @@
         console.log(ptype + " " + piece + " at " + x + " " + y);
         if (piece == "Pawn") {
           if (ptype == "white") {
+            if(y==0){
+              console.warn("TODO: promotion UI");
+              alert("Promotion is not implemented yet")
+            }
             if(y==6){
-              if(!haspiece(x, y - 2))highlight(x, y - 2);
+              if(!haspiece(x, y - 2) && !haspiece(x, y - 1))highlight(x, y - 2);
             }
             if (!haspiece(x, y - 1)) highlight(x, y - 1);
 
@@ -204,8 +208,12 @@
 
             highlightDiffPiecesPos(x-1,y-1,x,y)
           } else {
+            if(y==7){
+              console.warn("TODO: promotion UI");
+              alert("Promotion is not implemented yet")
+            }
             if(y==1){
-              if(!haspiece(x, y + 2))highlight(x, y + 2);
+              if(!haspiece(x, y + 2) && !haspiece(x, y + 1))highlight(x, y + 2);
             }
             if (!haspiece(x, y + 1)) highlight(x, y + 1);
             highlightDiffPiecesPos(x+1,y+1,x,y)
