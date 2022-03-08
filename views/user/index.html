@@ -85,7 +85,7 @@
         let piecetype = last_clicked_piece.ptype;
 
         let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`;
-        document.getElementById(x + "-" + y).innerHTML += toinsert;
+        document.getElementById(x + "-" + y).innerHTML = document.getElementById(x + "-" + y).getElementsByClassName("bg").outerHTML + toinsert;
         let div = document.getElementById(
           last_clicked_piece.x + "-" + last_clicked_piece.y
         );
