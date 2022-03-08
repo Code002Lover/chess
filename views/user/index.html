@@ -59,6 +59,15 @@
 
       var last_clicked_piece = {};
 
+      function setTile(x,y,background,pi) {
+        if(pi == null)document.getElementById(x + "-" + y).innerHTML = background.outerHTML
+        let piecetype = pi.ptype
+        let piece = pi.piece
+        if(piecetype==null||piece==null)document.getElementById(x + "-" + y).innerHTML = background.outerHTML
+        let p = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`
+        document.getElementById(x + "-" + y).innerHTML = background.outerHTML+p
+      }
+
       function clicked_bg(x, y) {
         if (last_clicked_piece == null) return;
         if (last_clicked_piece == {}) return;
@@ -84,14 +93,15 @@
         let piece = last_clicked_piece.piece;
         let piecetype = last_clicked_piece.ptype;
 
-        let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`;
-        if (haspiece(x, y) == true) {
-          document.getElementById(x + "-" + y).innerHTML =
-            document.getElementById(x + "-" + y).getElementsByClassName("bg")[0]
-              .outerHTML + toinsert;
-        } else {
-          document.getElementById(x + "-" + y).innerHTML += toinsert;
-        }
+        // let toinsert = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`;
+        // if (haspiece(x, y) == true) {
+        //   document.getElementById(x + "-" + y).innerHTML =
+        //     document.getElementById(x + "-" + y).getElementsByClassName("bg")[0]
+        //       .outerHTML + toinsert;
+        // } else {
+        //   document.getElementById(x + "-" + y).innerHTML += toinsert;
+        // }
+        setTile(x,y,document.getElementById(x + "-" + y).getElementsByClassName("bg"),last_clicked_piece)
         let div = document.getElementById(
           last_clicked_piece.x + "-" + last_clicked_piece.y
         );
