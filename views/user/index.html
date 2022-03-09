@@ -135,9 +135,14 @@
             pieces[x][y] = piece;
           }
         }
-
-        socket.send("update-board" + JSON.stringify(pieces)); //I know this is a huge security risk
-
+        try {
+          socket.send("update-board" + JSON.stringify(pieces)); //I know this is a huge security risk
+        }catch {
+          console.warn("sending server move failed, retry in 1 second");
+          setTimeout(function(){
+            socket.send("update-board" + JSON.stringify(pieces))
+          },1000)
+        }
         console.log("clicked bg at " + x + "," + y);
       }
 
@@ -405,8 +410,14 @@
 
       checksize();
 
-      function createws() {
+      function createws(fetch_data) {
         socket = new WebSocket("wss://yourchess.ga:3001");
+        socket.addEventListener("close",function(e) {
+          console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+          setTimeout(function() {
+            createws(true);
+          }, 1000);
+        };
         socket.addEventListener("open", function (event) {
           console.log("opened a connection to the game server!");
           // TODO: verify to the server with the acc
@@ -464,7 +475,15 @@
                 .replace(/\"undefined\"/, "");
             }
           }
-        });
+        }); //onmessage
+
+        if(fetch_data==true) {
+          setTimeout(function(){
+            try {
+              socket.send("fetch-board")
+            } catch (e) {}
+          },100)
+        }
       }
       var grid = {};
       var doc = document.getElementById("maindiv");
