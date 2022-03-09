@@ -385,6 +385,7 @@
       const c_h = window.innerHeight;
       var showed_text = false;
       var old = "";
+      var hide_message = false
       function checksize() {
         let w = window.innerWidth;
         let h = window.innerHeight;
@@ -396,7 +397,7 @@
           }
           showed_text = true;
         }
-        if (w < boardsize + 200 || h < boardsize + 200) {
+        if ((w < boardsize + 200 || h < boardsize + 200)&& !hide_message) {
           if (old == "") old = document.body.innerHTML;
           document.body.innerHTML = `<h1 style="color:red;">Your screen size is too small to show the chess board, please adjust the window size</h1>`;
         } else {
@@ -417,7 +418,7 @@
           setTimeout(function() {
             createws(true);
           }, 1000);
-        };
+        });
         socket.addEventListener("open", function (event) {
           console.log("opened a connection to the game server!");
           // TODO: verify to the server with the acc
