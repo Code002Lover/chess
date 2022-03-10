@@ -1,3 +1,8 @@
+function windowClose() {
+  window.open("", "_parent", "");
+  window.close();
+}
+
 Array.prototype.equals = function (array) {
   if (!array||this.length != array.length) return false;
   for (let i = 0, l = this.length; i < l; i++) {
