@@ -387,7 +387,7 @@ function createws(fetch_data) {
             div.getElementsByClassName("piece").length - 1
           ];
         if (piece == null) {
-          console.warn("piece==null", x, y);
+          //console.warn("piece==null", x, y);
           continue;
         }
         piece =
