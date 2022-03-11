@@ -373,57 +373,71 @@ function createws(fetch_data) {
   });
   socket.addEventListener("message", function (event) {
     let data = event.data;
-    let current_pieces = [];
-    for (let x = 0; x < 8; x++) {
-      current_pieces[x] = [];
-      for (let y = 0; y < 8; y++) {
-        let div = document.getElementById(x + "-" + y);
-        if (div == null) {
-          console.warn("div==null??", x, y);
-          continue;
+
+    if(data.search("game-update")==0) {
+      data=data.split("game-update")[1]
+      let current_pieces = [];
+      for (let x = 0; x < 8; x++) {
+        current_pieces[x] = [];
+        for (let y = 0; y < 8; y++) {
+          let div = document.getElementById(x + "-" + y);
+          if (div == null) {
+            console.warn("div==null??", x, y);
+            continue;
+          }
+          let piece =
+            div.getElementsByClassName("piece")[
+              div.getElementsByClassName("piece").length - 1
+            ];
+          if (piece == null) {
+            //console.warn("piece==null", x, y);
+            continue;
+          }
+          piece =
+            div.getElementsByClassName("piece")[
+              div.getElementsByClassName("piece").length - 1
+            ].outerHTML;
+          current_pieces[x][y] = piece;
         }
-        let piece =
-          div.getElementsByClassName("piece")[
-            div.getElementsByClassName("piece").length - 1
-          ];
-        if (piece == null) {
-          //console.warn("piece==null", x, y);
-          continue;
-        }
-        piece =
-          div.getElementsByClassName("piece")[
-            div.getElementsByClassName("piece").length - 1
-          ].outerHTML;
-        current_pieces[x][y] = piece;
       }
-    }
-    if (chess_debug) {
-      console.log("event data", data);
-    }
-    let new_pieces = JSON.parse(data);
-    if (current_pieces.equals(new_pieces)) return "already up to date";
-    for (let x = 0; x < 8; x++) {
-      for (let y = 0; y < 8; y++) {
-        if (new_pieces[x][y] == current_pieces[x][y]) continue;
-        if (new_pieces[x][y] == null) new_pieces[x][y] = "";
-        if (new_pieces[x][y] == "null") new_pieces[x][y] = "";
-        if (new_pieces[x][y] == "undefined") new_pieces[x][y] = "";
-        let div = document.getElementById(x + "-" + y);
-        if (div == null) {
-          console.warn("div==null??", x, y);
-          continue;
-        }
-        let bg = div.getElementsByClassName("bg")[0];
-        if (bg == null) {
-          console.warn("bg==null", x, y);
-          continue;
-        }
-        bg = bg.outerHTML;
-        div.innerHTML = (bg + new_pieces[x][y])
-          .replace(/\"null\"/, "")
-          .replace(/\"undefined\"/, "");
+      if (chess_debug) {
+        console.log("event data", data);
       }
+      let new_pieces = JSON.parse(data);
+      if (current_pieces.equals(new_pieces)) return "already up to date";
+      for (let x = 0; x < 8; x++) {
+        for (let y = 0; y < 8; y++) {
+          if (new_pieces[x][y] == current_pieces[x][y]) continue;
+          if (new_pieces[x][y] == null) new_pieces[x][y] = "";
+          if (new_pieces[x][y] == "null") new_pieces[x][y] = "";
+          if (new_pieces[x][y] == "undefined") new_pieces[x][y] = "";
+          let div = document.getElementById(x + "-" + y);
+          if (div == null) {
+            console.warn("div==null??", x, y);
+            continue;
+          }
+          let bg = div.getElementsByClassName("bg")[0];
+          if (bg == null) {
+            console.warn("bg==null", x, y);
+            continue;
+          }
+          bg = bg.outerHTML;
+          div.innerHTML = (bg + new_pieces[x][y])
+            .replace(/\"null\"/, "")
+            .replace(/\"undefined\"/, "");
+        }
+      }
+    }//game update
+
+    if(data.search("color-update")==0){
+      data=data.split("color-update")[1]
+      // TODO: restrict movement of pieces to color that matches "data"
     }
+    if(data.search("spectating")==0){
+      // TODO: disable movement completely and show a message without alert
+      alert("you are spectating this game, this means you cannot move any pieces")
+    }
+
   }); //onmessage
 
   if(fetch_data==true) {
