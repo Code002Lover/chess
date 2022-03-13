@@ -51,41 +51,100 @@ function clicked_bg(x, y) {
   );
   div.innerHTML = div.innerHTML.replace(last_clicked_piece["html"], "");
 
-  let pieces = [];
+  //start new message
 
+  let updated_board = ""
+  /*
+    data structure:
+    `
+    xyptypepiece
+    `
+
+    where x is between 0 and 7 (1 char)
+    where y is between 0 and 7 (1 char)
+    where ptype is 0 or 1 (1 bit, 0=white,1=dark)
+    where piece is one of the 6 pieces (Bishop=0,...,Rook=5,none=6) (1 char)
+    one piece should therefore be a size of 4 chars, meaning that the whole size of a message would be 256 bytes long (at 1 char=1 byte as per UTF-8)
+
+    this could further be improved, however this should already be good enough (compared to the 7KB per move before)
+  */
   for (let x = 0; x < 8; x++) {
-    pieces[x] = [];
     for (let y = 0; y < 8; y++) {
-      let div = document.getElementById(x + "-" + y);
-      if (div == null) {
-        console.warn("div==null??", x, y);
+      updated_board+=x+y
+
+      let p = get_piece(x,y)
+      if(p == undefined) {
+        updated_board+="06"
         continue;
       }
-      let piece =
-        div.getElementsByClassName("piece")[
-          div.getElementsByClassName("piece").length - 1
-        ];
-      if (piece == null) {
-        //not every div has a piece
-        continue;
+      let ptype = p.src.replace("/images/pieces/","").split("/")[0]
+      let piece = p.src.replace("/images/pieces/","").split("/")[1].replace(".png","")
+      if(ptype=="dark"){
+        updated_board+="1"
+      } else {
+        updated_board+="0"
       }
-      piece =
-        div.getElementsByClassName("piece")[
-          div.getElementsByClassName("piece").length - 1
-        ].outerHTML;
-      pieces[x][y] = piece;
+      if(piece=="Bishop")updated_board+="0"
+      if(piece=="King")updated_board+="1"
+      if(piece=="Knight")updated_board+="2"
+      if(piece=="Pawn")updated_board+="3"
+      if(piece=="Queen")updated_board+="4"
+      if(piece=="Rook")updated_board+="5"
     }
   }
+
   try {
-    socket.send("update-board" + JSON.stringify(pieces)); //I know this is a huge security risk
+    socket.send("update-board" + updated_board); //I know this is a huge security risk
   }catch {
     console.warn("sending server move failed, retry in 1 second");
     setTimeout(function(){
-      socket.send("update-board" + JSON.stringify(pieces))
+      socket.send("update-board" + updated_board)
     },1000)
   }
+
+  //console.log("sent",updated_board);
+
+  //end new message
+
+  //start old message
+  // let pieces = [];
+  //
+  // for (let x = 0; x < 8; x++) {
+  //   pieces[x] = [];
+  //   for (let y = 0; y < 8; y++) {
+  //     let div = document.getElementById(x + "-" + y);
+  //     if (div == null) {
+  //       console.warn("div==null??", x, y);
+  //       continue;
+  //     }
+  //     let piece =
+  //       div.getElementsByClassName("piece")[
+  //         div.getElementsByClassName("piece").length - 1
+  //       ];
+  //     if (piece == null) {
+  //       //not every div has a piece
+  //       continue;
+  //     }
+  //     piece =
+  //       div.getElementsByClassName("piece")[
+  //         div.getElementsByClassName("piece").length - 1
+  //       ].outerHTML;
+  //     pieces[x][y] = piece;
+  //   }
+  // }
+  // try {
+  //   socket.send("update-board" + JSON.stringify(pieces)); //I know this is a huge security risk
+  // }catch {
+  //   console.warn("sending server move failed, retry in 1 second");
+  //   setTimeout(function(){
+  //     socket.send("update-board" + JSON.stringify(pieces))
+  //   },1000)
+  // }
+  //
+  //end old message
+
   console.log("clicked bg at " + x + "," + y);
-}
+} //end clicked bg
 
 function highlight_background(x, y) {
   let div = document.getElementById(x + "-" + y);
@@ -379,57 +438,60 @@ function createws(fetch_data) {
 
     if(data.search("game-update")==0) {
       data=data.split("game-update")[1]
-      let current_pieces = [];
-      for (let x = 0; x < 8; x++) {
-        current_pieces[x] = [];
-        for (let y = 0; y < 8; y++) {
-          let div = document.getElementById(x + "-" + y);
-          if (div == null) {
-            console.warn("div==null??", x, y);
-            continue;
-          }
-          let piece =
-            div.getElementsByClassName("piece")[
-              div.getElementsByClassName("piece").length - 1
-            ];
-          if (piece == null) {
-            //console.warn("piece==null", x, y);
-            continue;
-          }
-          piece =
-            div.getElementsByClassName("piece")[
-              div.getElementsByClassName("piece").length - 1
-            ].outerHTML;
-          current_pieces[x][y] = piece;
-        }
-      }
       if (chess_debug) {
         console.log("event data", data);
       }
-      let new_pieces = JSON.parse(data);
-      if (current_pieces.equals(new_pieces)) return "already up to date";
-      for (let x = 0; x < 8; x++) {
-        for (let y = 0; y < 8; y++) {
-          if (new_pieces[x][y] == current_pieces[x][y]) continue;
-          if (new_pieces[x][y] == null) new_pieces[x][y] = "";
-          if (new_pieces[x][y] == "null") new_pieces[x][y] = "";
-          if (new_pieces[x][y] == "undefined") new_pieces[x][y] = "";
-          let div = document.getElementById(x + "-" + y);
-          if (div == null) {
-            console.warn("div==null??", x, y);
-            continue;
-          }
-          let bg = div.getElementsByClassName("bg")[0];
-          if (bg == null) {
-            console.warn("bg==null", x, y);
-            continue;
-          }
-          bg = bg.outerHTML;
-          div.innerHTML = (bg + new_pieces[x][y])
-            .replace(/\"null\"/, "")
-            .replace(/\"undefined\"/, "");
+      //begin new receiver
+
+      for (let i = 0; i < 64; i+=4) {
+        let current = data.slice(i,i+3)
+        let x = parseInt(current.slice(0,0))
+        let y = parseInt(current.slice(1,1))
+        let ptype = current.slice(2,2)
+        let piece = current.slice(3,3)
+        if(piece==6)continue;
+        if(ptype=="1"){
+          ptype="dark"
+        } else {
+          ptype="white"
         }
+        if(piece=="0")piece="Bishop"
+        if(piece=="1")piece="King"
+        if(piece=="2")piece="Knight"
+        if(piece=="3")piece="Pawn"
+        if(piece=="4")piece="Queen"
+        if(piece=="5")piece="Rook"
+
+        setTile(x,y,{["ptype"]:ptype,["piece"]:piece})
       }
+
+      //end new receiver
+
+      //begin old receiver
+      // let new_pieces = JSON.parse(data);
+      // for (let x = 0; x < 8; x++) {
+      //   for (let y = 0; y < 8; y++) {
+      //     if (new_pieces[x][y] == current_pieces[x][y]) continue;
+      //     if (new_pieces[x][y] == null) new_pieces[x][y] = "";
+      //     if (new_pieces[x][y] == "null") new_pieces[x][y] = "";
+      //     if (new_pieces[x][y] == "undefined") new_pieces[x][y] = "";
+      //     let div = document.getElementById(x + "-" + y);
+      //     if (div == null) {
+      //       console.warn("div==null??", x, y);
+      //       continue;
+      //     }
+      //     let bg = div.getElementsByClassName("bg")[0];
+      //     if (bg == null) {
+      //       console.warn("bg==null", x, y);
+      //       continue;
+      //     }
+      //     bg = bg.outerHTML;
+      //     div.innerHTML = (bg + new_pieces[x][y])
+      //       .replace(/\"null\"/, "")
+      //       .replace(/\"undefined\"/, "");
+      //   }
+      // }
+      //end old receiver
     }//game update
 
     if(data.search("color-update")==0){
@@ -438,11 +500,8 @@ function createws(fetch_data) {
       alert("you are playing as: "+color)
     }
     if(data.search("spectating")==0){
-      // TODO: disable movement completely and show a message without alert
-
       clicked_piece = function(){}
       clicked_bg = function(){}
-
       alert("you are spectating this game, this means you cannot move any pieces")
     }
 
