@@ -129,7 +129,10 @@ function haspiece(x, y) {
   return div.getElementsByClassName("piece")[0] != null;
 }
 
+var player_piecetype_lock;
+
 function clicked_piece(x, y, ptype, piece) {
+  if(ptype!=player_piecetype_lock)return
   let div = document.getElementById(x + "-" + y);
   let bg = div.getElementsByClassName("bg")[0];
   if (bg != null) {
@@ -431,7 +434,7 @@ function createws(fetch_data) {
 
     if(data.search("color-update")==0){
       let color=data.split("color-update")[1]
-      // TODO: restrict movement of pieces to color that matches "data"
+      player_piecetype_lock=color //lock the clickable pieces to the color sent by the server
       alert("you are playing as: "+color)
     }
     if(data.search("spectating")==0){
