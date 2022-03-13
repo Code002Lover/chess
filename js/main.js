@@ -25,6 +25,7 @@ function setTile(x,y,pi) {
     console.warn("setTile received invalid y: ",y);
     return
   }
+  console.log(x,y,pi);
   let background = document.getElementById(`${x}-${y}`).getElementsByClassName("bg")[0]
   if(background==null)console.error("setTile bg error");
   if(background.outerHTML==null)console.error("setTile outerHTML error");
@@ -118,46 +119,7 @@ function clicked_bg(x, y) {
     },1000)
   }
 
-  //console.log("sent",updated_board);
-
-  //end new message
-
-  //start old message
-  // let pieces = [];
-  //
-  // for (let x = 0; x < 8; x++) {
-  //   pieces[x] = [];
-  //   for (let y = 0; y < 8; y++) {
-  //     let div = document.getElementById(x + "-" + y);
-  //     if (div == null) {
-  //       console.warn("div==null??", x, y);
-  //       continue;
-  //     }
-  //     let piece =
-  //       div.getElementsByClassName("piece")[
-  //         div.getElementsByClassName("piece").length - 1
-  //       ];
-  //     if (piece == null) {
-  //       //not every div has a piece
-  //       continue;
-  //     }
-  //     piece =
-  //       div.getElementsByClassName("piece")[
-  //         div.getElementsByClassName("piece").length - 1
-  //       ].outerHTML;
-  //     pieces[x][y] = piece;
-  //   }
-  // }
-  // try {
-  //   socket.send("update-board" + JSON.stringify(pieces)); //I know this is a huge security risk
-  // }catch {
-  //   console.warn("sending server move failed, retry in 1 second");
-  //   setTimeout(function(){
-  //     socket.send("update-board" + JSON.stringify(pieces))
-  //   },1000)
-  // }
-  //
-  //end old message
+  console.log("sent",updated_board);
 
   console.log("clicked bg at " + x + "," + y);
 } //end clicked bg
@@ -224,7 +186,6 @@ function clicked_piece(x, y, ptype, piece) {
   highlighting = [];
   let pie = div.getElementsByClassName("piece")[0];
   if (last_clicked_piece["x"] == x && last_clicked_piece["y"] == y) {
-    console.log("last_clicked_piece: ", last_clicked_piece);
     last_clicked_piece = {};
     return;
   }
@@ -239,7 +200,7 @@ function clicked_piece(x, y, ptype, piece) {
   if (piece == "Pawn") {
     if (ptype == "white") {
       if (y == 0) {
-        console.warn("TODO: promotion UI");
+        // TODO: promotion
         alert("Promotion is not implemented yet");
       }
       if (y == 6) {
@@ -253,7 +214,7 @@ function clicked_piece(x, y, ptype, piece) {
       highlightDiffPiecesPos(x - 1, y - 1, x, y);
     } else {
       if (y == 7) {
-        console.warn("TODO: promotion UI");
+        // TODO: promotion
         alert("Promotion is not implemented yet");
       }
       if (y == 1) {
@@ -430,6 +391,31 @@ function checksize() {
 
 checksize();
 
+function game_update(data) {
+  for (let i = 0; i < 64; i+=4) {
+    let current = data.slice(i,i+3)
+    console.log("i:",i,"current:",current)
+    let x = parseInt(current.slice(0,0))
+    let y = parseInt(current.slice(1,1))
+    let ptype = current.slice(2,2)
+    let piece = current.slice(3,3)
+    if(piece==6)continue;
+    if(ptype=="1"){
+      ptype="dark"
+    } else {
+      ptype="white"
+    }
+    if(piece=="0")piece="Bishop"
+    if(piece=="1")piece="King"
+    if(piece=="2")piece="Knight"
+    if(piece=="3")piece="Pawn"
+    if(piece=="4")piece="Queen"
+    if(piece=="5")piece="Rook"
+
+    setTile(x,y,{["ptype"]:ptype,["piece"]:piece})
+  }
+}
+
 function createws(fetch_data) {
   socket = new WebSocket("wss://yourchess.ga:3001");
   socket.addEventListener("close",function(e) {
@@ -458,63 +444,13 @@ function createws(fetch_data) {
 
     if(data.search("game-update")==0) {
       data=data.split("game-update")[1]
-      //begin new receiver
-
-      for (let i = 0; i < 64; i+=4) {
-        let current = data.slice(i,i+3)
-        let x = parseInt(current.slice(0,0))
-        let y = parseInt(current.slice(1,1))
-        let ptype = current.slice(2,2)
-        let piece = current.slice(3,3)
-        if(piece==6)continue;
-        if(ptype=="1"){
-          ptype="dark"
-        } else {
-          ptype="white"
-        }
-        if(piece=="0")piece="Bishop"
-        if(piece=="1")piece="King"
-        if(piece=="2")piece="Knight"
-        if(piece=="3")piece="Pawn"
-        if(piece=="4")piece="Queen"
-        if(piece=="5")piece="Rook"
-
-        setTile(x,y,{["ptype"]:ptype,["piece"]:piece})
-      }
-
-      //end new receiver
-
-      //begin old receiver
-      // let new_pieces = JSON.parse(data);
-      // for (let x = 0; x < 8; x++) {
-      //   for (let y = 0; y < 8; y++) {
-      //     if (new_pieces[x][y] == current_pieces[x][y]) continue;
-      //     if (new_pieces[x][y] == null) new_pieces[x][y] = "";
-      //     if (new_pieces[x][y] == "null") new_pieces[x][y] = "";
-      //     if (new_pieces[x][y] == "undefined") new_pieces[x][y] = "";
-      //     let div = document.getElementById(x + "-" + y);
-      //     if (div == null) {
-      //       console.warn("div==null??", x, y);
-      //       continue;
-      //     }
-      //     let bg = div.getElementsByClassName("bg")[0];
-      //     if (bg == null) {
-      //       console.warn("bg==null", x, y);
-      //       continue;
-      //     }
-      //     bg = bg.outerHTML;
-      //     div.innerHTML = (bg + new_pieces[x][y])
-      //       .replace(/\"null\"/, "")
-      //       .replace(/\"undefined\"/, "");
-      //   }
-      // }
-      //end old receiver
+      game_update(data)
     }//game update
 
     if(data.search("color-update")==0){
       let color=data.split("color-update")[1]
       player_piecetype_lock=color //lock the clickable pieces to the color sent by the server
-      alert("you are playing as: "+color)
+      //alert("you are playing as: "+color)
     }
     if(data.search("spectating")==0){
       clicked_piece = function(){}
