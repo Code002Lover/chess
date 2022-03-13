@@ -32,7 +32,10 @@ function setTile(x,y,pi) {
   if(pi == null)document.getElementById(x + "-" + y).innerHTML = background.outerHTML
   let piecetype = pi.ptype
   let piece = pi.piece
-  if(piecetype==null||piece==null)document.getElementById(x + "-" + y).innerHTML = background.outerHTML
+  if(piecetype==null||piece==null||piece==""||piecetype==""||piece=="None"||piecetype=="None"){
+    document.getElementById(x + "-" + y).innerHTML = background.outerHTML
+    return
+  }
   let p = `<img src="/images/pieces/${piecetype}/${piece}.png" piece="${piece}" piecetype="${piecetype}" draggable="false"  class="piece absolute" style="left:0px;top:0px" onclick="clicked_piece(${x},${y},'${piecetype}','${piece}')">`
   document.getElementById(x + "-" + y).innerHTML = background.outerHTML+p
 }
@@ -87,15 +90,16 @@ function clicked_bg(x, y) {
   */
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 8; y++) {
-      updated_board+=x+y
+      updated_board+=x
+      updated_board+=y
 
       let p = get_piece(x,y)
       if(p == undefined) {
         updated_board+="06"
         continue;
       }
-      let ptype = p.src.replace("/images/pieces/","").split("/")[0]
-      let piece = p.src.replace("/images/pieces/","").split("/")[1].replace(".png","")
+      let ptype = p.src.replace("https://yourchess.ga/images/pieces/","").split("/")[0]
+      let piece = p.src.slice(p.src.lastIndexOf("/")+1,p.src.length).replace(".png","") //from link to piece name
       if(ptype=="dark"){
         updated_board+="1"
       } else {
@@ -107,6 +111,8 @@ function clicked_bg(x, y) {
       if(piece=="Pawn")updated_board+="3"
       if(piece=="Queen")updated_board+="4"
       if(piece=="Rook")updated_board+="5"
+
+      console.log("piece at",x,y,"is a",ptype,piece);
     }
   }
 
@@ -392,14 +398,14 @@ function checksize() {
 checksize();
 
 function game_update(data) {
-  for (let i = 0; i < 64; i+=4) {
-    let current = data.slice(i,i+3)
+  for (let i = 0; i < data.length; i+=4) {
+    let current = data.slice(i,i+4)
     console.log("i:",i,"current:",current)
-    let x = parseInt(current.slice(0,0))
-    let y = parseInt(current.slice(1,1))
-    let ptype = current.slice(2,2)
-    let piece = current.slice(3,3)
-    if(piece==6)continue;
+
+    let x = parseInt(current.charAt(0))
+    let y = parseInt(current.charAt(1))
+    let ptype = current.charAt(2)
+    let piece = current.charAt(3)
     if(ptype=="1"){
       ptype="dark"
     } else {
@@ -411,7 +417,8 @@ function game_update(data) {
     if(piece=="3")piece="Pawn"
     if(piece=="4")piece="Queen"
     if(piece=="5")piece="Rook"
-
+    if(piece=="6")piece="None"
+    console.log("piece at",x,y,"is a",ptype,piece);
     setTile(x,y,{["ptype"]:ptype,["piece"]:piece})
   }
 }
