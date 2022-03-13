@@ -430,11 +430,16 @@ function createws(fetch_data) {
     }//game update
 
     if(data.search("color-update")==0){
-      data=data.split("color-update")[1]
+      let color=data.split("color-update")[1]
       // TODO: restrict movement of pieces to color that matches "data"
+      alert("you are playing as: "+color)
     }
     if(data.search("spectating")==0){
       // TODO: disable movement completely and show a message without alert
+
+      clicked_piece = function(){}
+      clicked_bg = function(){}
+
       alert("you are spectating this game, this means you cannot move any pieces")
     }
 
