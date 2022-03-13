@@ -436,11 +436,12 @@ function createws(fetch_data) {
   socket.addEventListener("message", function (event) {
     let data = event.data;
 
+    if (chess_debug) {
+      console.log("event data", data);
+    }
+
     if(data.search("game-update")==0) {
       data=data.split("game-update")[1]
-      if (chess_debug) {
-        console.log("event data", data);
-      }
       //begin new receiver
 
       for (let i = 0; i < 64; i+=4) {
