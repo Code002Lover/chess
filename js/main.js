@@ -9,6 +9,22 @@ var highlighting = [];
 var last_clicked_piece = {};
 
 function setTile(x,y,pi) {
+  if(x<0) {
+    console.warn("setTile received invalid x: ",x);
+    return
+  }
+  if(y<0) {
+    console.warn("setTile received invalid y: ",y);
+    return
+  }
+  if(x>7) {
+    console.warn("setTile received invalid x: ",x);
+    return
+  }
+  if(y>7) {
+    console.warn("setTile received invalid y: ",y);
+    return
+  }
   let background = document.getElementById(`${x}-${y}`).getElementsByClassName("bg")[0]
   if(background==null)console.error("setTile bg error");
   if(background.outerHTML==null)console.error("setTile outerHTML error");
