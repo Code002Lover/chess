@@ -175,17 +175,15 @@ function haspiece(x, y) {
 var player_piecetype_lock;
 
 function clicked_piece(x, y, ptype, piece) {
-  if(ptype!=player_piecetype_lock)return
   let div = document.getElementById(x + "-" + y);
   let bg = div.getElementsByClassName("bg")[0];
   if (bg != null) {
     if (ishighlighted(x, y)) {
       clicked_bg(x, y);
       return;
-    } else {
-      console.log(`bg at ${x},${y} is not highlighted`);
     }
   }
+  if(ptype!=player_piecetype_lock)return
   for (let i = 0; i < highlighting.length; i++) {
     highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
   }
