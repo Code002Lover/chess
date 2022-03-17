@@ -47,6 +47,7 @@ function clicked_bg(x, y) {
   for (let i = 0; i < highlighting.length; i++) {
     highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
   }
+  highlighting = []; //unhighlights them
 
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 8; y++) {
@@ -59,7 +60,6 @@ function clicked_bg(x, y) {
     }
   }
 
-  highlighting = []; //unhighlights them
   // last_clicked_piece == current piece / piece to move
   //(x,y) == place to move it to
   let piece = last_clicked_piece.piece;
@@ -396,6 +396,10 @@ function checksize() {
 checksize();
 
 function game_update(data) {
+  for (let i = 0; i < highlighting.length; i++) {
+    highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
+  }
+  highlighting = []; //unhighlights all pieces (dodge / dupe fix)
   for (let i = 0; i < data.length; i+=4) {
     let current = data.slice(i,i+4)
     console.log("i:",i,"current:",current)
