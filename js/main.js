@@ -4,6 +4,8 @@ console.warn("current chess version: " + version);
 var socket;
 var chess_debug = true;
 
+var your_turn = false;
+
 var highlighting = [];
 
 var last_clicked_piece = {};
@@ -43,6 +45,7 @@ function setTile(x,y,pi) {
 function clicked_bg(x, y) {
   if (last_clicked_piece == null) return;
   if (last_clicked_piece == {}) return;
+  if(!your_turn)return
 
   for (let i = 0; i < highlighting.length; i++) {
     highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
@@ -116,6 +119,7 @@ function clicked_bg(x, y) {
     }
   }
 
+  your_turn=false
   try {
     socket.send("update-board" + updated_board); //I know this is a huge security risk
   }catch {
@@ -396,6 +400,7 @@ function checksize() {
 checksize();
 
 function game_update(data) {
+  your_turn=true;
   for (let i = 0; i < highlighting.length; i++) {
     highlight_background(highlighting[i]["x"], highlighting[i]["y"]);
   }
