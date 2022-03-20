@@ -464,12 +464,13 @@ function createws(fetch_data) {
     if(data.search("color-update")==0){
       let color=data.split("color-update")[1]
       player_piecetype_lock=color //lock the clickable pieces to the color sent by the server
+      if(color == "white")your_turn=true //for the start of the game, later on it'll be kind of buggy
       //alert("you are playing as: "+color)
     }
     if(data.search("spectating")==0){
       clicked_piece = function(){}
       clicked_bg = function(){}
-      alert("you are spectating this game, this means you cannot move any pieces")
+      alert("you are spectating this game, this means you cannot move any pieces") // TODO: change this to some sort of popup or text instead of an alert
     }
 
   }); //onmessage
